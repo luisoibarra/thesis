@@ -1,0 +1,218 @@
+\documentclass{rcci} %[noauthor]
+
+\usepackage{hyperref}
+\usepackage{endnotes}
+
+\setcounter{page}{1}
+
+\let\footnote=\endnote
+
+\newcommand{\orcidaffil}[1]{%
+	\href{https://orcid.org/#1}{#1}}
+
+\begin{document}
+\renewcommand{\figurename}{\bf Fig.}
+
+% Detalles del artículo, título y autores
+\def\tipoarticulo{Artículo originales} % Artículos invitados | Artículos originales | Artículos de revisión | Artículos cortos
+\def\tematica{Reconocimiento de patrones} % Bioinformática | Desarrollo de aplicaciones informáticas | Ingeniería y gestión de software | Inteligencia artificial | Matemática computacional | Procesamiento de imágenes | Programación paralela y distribuida | Reconocimiento de patrones | Seguridad informática | Sistemas digitales | Software libre | Técnicas de programación | Tecnologías de bases de datos | Tecnologías de la información y las telecomunicaciones
+\onehalfspacing
+\title{Este es el título de mi trabajo }
+\def\englistitle{This is the title for my work}
+\author[1*]{\bf Nombre y apellidos \orcidaffil{0000-0000-0000-0000}}
+\author[2]{\bf Nombre y apellidos \orcidaffil{0000-0000-0000-0000}}
+\author[N]{\bf Nombre y apellidos \orcidaffil{0000-0000-0000-0000}}
+\affil[1]{Afiliación institucional completa. Dirección postal. Correo electrónico}
+\affil[2]{Afiliación institucional completa. Dirección postal. Correo electrónico}
+\affil[N]{Afiliación institucional completa. Dirección postal. Correo electrónico}
+\def\authormail{(\href{mailto:correo@dominio.com}{\nolinkurl{correo@dominio.com}})}
+%
+
+\maketitle
+%
+{\fontsize{12}{12}\selectfont\onehalfspacing
+\begin{abstract}
+\par\noindent
+
+En un solo párrafo. El resumen tiene como objetivo orientar al lector a identificar el contenido básico de forma rápida y exacta y a determinar la relevancia del contenido. Debe redactarse en tercera persona, en tiempo pasado exceptuando la frase concluyente, ser claro, descriptivo y poseer 250 palabras como máximo, contener \underline{los objetivos del trabajo}, \underline{la metodología utilizada} y \underline{los resultados alcanzados} y finalizar con un comentario respecto al significado de los resultados o una pequeña conclusión. No debe incluir referencias, abreviaturas ni ecuaciones. (Times New Roman, 12 puntos, interlineado a 1.5, justificación completa para el cuerpo. Si es un Resumen estructurado las secciones van seguidas de dos puntos (A/b neg) y su texto (sin negrita). Cada sección en una línea independiente).  
+\vskip 1em
+\keywords{palabras 1; palabras 2; palabras 3; palabras 4; palabras 5. (Times New Roman, 12 puntos).}
+\textit{Entre 4 y 5 palabras clave, las cuales deben reflejar el contenido central del trabajo y ayudar a indizar el artículo.}
+\vskip 2em
+\englishabstract{\vskip 0.5em \normalfont{En un solo párrafo y hasta 250 palabra}}
+\vskip 1em
+\englishkeywords{palabras 1; palabras 2; palabras 3; palabras 4; palabras 5}
+\vskip 1em
+\end{abstract}}
+
+
+\section*{Introducción }
+\vskip 1em
+En las referencias solo se incluyen los trabajos citados explícitamente en el texto. Evite el uso de fuentes no confiables. Toda la bibliografía usada debe estar acotada en el cuerpo del documento siguiendo las pautas de las normas ISO 690 de la forma (Apellido, año). Ejemplos: de forma simple \citep{Smith:2012qr} o múltiple \citep{Smith:2012qr,Smith:2013jd}.
+
+Los párrafos se escribirán en Times New Roman a 12 puntos, con espaciado 1.5, justificado y una línea en blanco como separador (usando solo enter como separador).
+
+\textit{La introducción constituye una presentación del tema y debe incluir los objetivos trazados, exponer brevemente los trabajos más relevantes y destacar las contribuciones de otros autores al tema objeto de estudio, así como justificar las razones por las que se realiza la investigación.}
+ 
+\parskip=12pt
+\section*{Métodos o Metodología Computacional}\label{metodos}
+
+Los párrafos se escribirán en Times New Roman a 12 puntos y con espaciado 1,5 y una línea en blanco como separador. 
+
+\textit{En esta sección se explica cómo se hizo la investigación. Se describe el diseño de la misma y se explica cómo se llevó a la práctica, justificando la elección de métodos y técnicas de forma tal que un lector pueda repetir el estudio.}
+
+\subsection*{Subepígrafes en caso de utilizarse}
+
+Los párrafos se escribirán en Times New Roman a 12 puntos y con espaciado 1,5 y una línea en blanco como separador.
+
+\subsubsection*{SubSubepígrafes en caso de utilizarse}
+
+Los párrafos se escribirán en Times New Roman a 12 puntos y con espaciado 1,5 y una línea en blanco como separador.
+
+\section*{Resultados y discusión}
+
+Los párrafos se escribirán en Times New Roman a 12 puntos y con espaciado 1,5 y una línea en blanco como separador.
+
+\textit{Los resultados obtenidos se exponen después de explicar las técnicas seleccionadas y descritas en la sección anterior. Los mismos deben apoyarse por el uso de las tablas, figuras y diagramas, que expresan de forma clara los resultados del estudio realizado por los autores. }
+
+\textit{Se espera encontrar en esta sección aquellos elementos que hacen que la investigación presentada constituya una novedad o una mejora en su campo de acción y su superioridad con respecto a soluciones similares.  Se debe enfatizar en la validación del resultado y su posible aplicación en contextos diferentes al reportado en el artículo. En la parte de la discusión se presenta el análisis de los resultados obtenidos que deben corresponder a los objetivos planteados en el artículo y su contraste y comparación con lo reportado previamente en la literatura científica.}
+
+Cuando en el texto tenemos una relación en forma de lista, se utilizará forma numérica:
+\begin{enumerate}
+	\item Texto. 
+	\begin{enumerate}
+		\item Texto. 
+		\begin{enumerate}
+			\item Texto. 
+		\end{enumerate}
+		\item Texto.
+	\end{enumerate}
+	\item Texto.
+\end{enumerate}  
+
+Todas las tablas y figuras deberán ser mencionadas en el texto. A continuación vea una ejemplo de la Figura \ref{fig:ejemplo} y de la Tabla \ref{tab:actions_classification}.
+
+
+\begin{figure}[!h]	
+\begin{center}
+	\includegraphics[width=0.5\textwidth]{picture.png}
+\end{center}
+\caption{\fontsize{11}{12}\selectfont El título de las figuras se colocará en la parte inferior, centrado, utilizando numeración secuencial según el orden en que aparecen en el trabajo.}
+\label{fig:ejemplo}
+\end{figure}
+
+
+\begin{table}[!ht]
+\centering
+\caption{\fontsize{11}{12}\selectfont El título de las tablas en la parte inferior, centrado, utilizando numeración secuencial según el orden en que aparecen en el trabajo.}
+\label{tab:actions_classification} 
+\begin{threeparttable}[b]
+	\fontsize{9}{11}\selectfont{
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+	\hline 
+	\textbf{} & \textbf{Columna 1} & \textbf{Columna 2} & \textbf{Columna 
+3}\\
+	\hline 
+	\textbf{Fila 1} & x\tnote{a}  & y & z\\
+	\hline 
+	\textbf{Fila 2} & x  & y & z\tnote{b}\\
+	\hline
+\end{tabular}
+}
+\begin{tablenotes}
+\item [a] \fontsize{8}{10}\selectfont{De emplear notas aclaratorias se colocarán al pie de la tabla.} \\
+\item [b] \fontsize{8}{10}\selectfont{Otra nota aclaratoria.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Si se desea usar alguna ecuación:
+\begin{equation}\label{key}
+	Raz\acute{o}n\ de\ tasa\ de\ mortalidad_{\ causa\ X} = \dfrac{Tasa\ de\ mortalidad\ masculina_{\ causa\ X}}{Tasa\ de\ mortalidad\ femenina_{\ causa\ X}}
+\end{equation}
+
+Texto\footnote{Notas aclaratorias del texto, estas estarán ubicadas al final del trabajo.} Si se quiere hacer un llamado para una nota aclaratoria \endnote{Esta es otra nota al final} (este va en superíndice, pero NO entre paréntesis).
+
+\section*{Conclusiones}
+
+Los párrafos se escribirán en Times New Roman a 12 puntos y con espaciado 1,5 y una línea en blanco como separador.
+
+\textit{Las conclusiones se derivan del trabajo realizado. No son una repetición de incluido en el Resumen. Toda conclusión debe estar fundamentada en lo expuesto y discutido en el trabajo y debe reflejar el cumplimiento de los objetivos. Deben indicar cómo el trabajo contribuye o es un avance en el campo y objeto de estudio. Además, deben sugerir usos y trabajos futuros.}
+
+
+\section*{\fontsize{12}{15}\selectfont Agradecimientos (Opcional)}
+
+Los párrafos se escribirán en Times New Roman a 12 puntos y con espaciado 1,5 y 
+una línea en blanco como separador.
+
+Se añaden los nombres de personas que contribuyeron a la investigación pero que 
+no se consideran como parte del colectivo de autores. Se incluyen los nombres 
+de 
+instituciones o proyectos que proporcionaron facilidades para la realización de 
+la investigación tanto materiales, logísticas o financieras.
+
+\section*{Referencias}
+
+En las referencias solo se incluyen los trabajos citados explícitamente en el texto. Evite el uso de fuentes no confiables. Toda la bibliografía usada debe estar acotada en el cuerpo del documento siguiendo las pautas de las normas ISO 690 de la forma (Apellido, año). Ejemplos: forma simple \citep{Smith:2012qr} o múltiple \citep{Smith:2012qr,Smith:2013jd}.
+
+\bibliographystyle{plainnat}
+\bibliography{sample}
+
+\begin{center}
+	\textbf{Conflicto de interés}
+\end{center}
+El autor autoriza la distribución y uso de su artículo. (12 Ptos. Just.)
+
+\begin{center}
+	\textbf{Contribuciones de los autores} 
+\end{center}
+\begin{enumerate}
+	\item Conceptualización: Nombre y Apellidos del autor.
+	\item Curación de datos: Nombre y Apellidos del autor
+	\item Análisis formal: Nombre y Apellidos del autor 
+	\item Adquisición de fondos: Nombre y Apellidos del autor
+	\item Investigación: Nombre y Apellidos del autor 
+	\item Metodología: Nombre y Apellidos del autor
+	\item Administración del proyecto: Nombre y Apellidos del autor
+	\item Recursos: Nombre y Apellidos del autor
+	\item Software: Nombre y Apellidos del autor 
+	\item Supervisión: Nombre y Apellidos del autor
+	\item Validación: Nombre y Apellidos del autor
+	\item Visualización: Nombre y Apellidos del autor
+	\item Redacción - borrador original: Nombre y Apellidos del autor
+	\item Redacción - revisión y edición: Nombre y Apellidos del autor
+\end{enumerate}
+
+OBSERVACIÓN:
+Cada rol se define de la siguiente forma:
+\begin{itemize}
+	\item Conceptualización - Ideas; formulación o evolución de los objetivos y metas generales de la investigación.
+	\item Curación de datos - Actividades de gestión para anotar (producir metadatos), depurar datos y mantener los datos de la investigación (incluido el código de software, cuando sea necesario para interpretar los propios datos) para su uso inicial y su posterior reutilización.
+	\item Análisis formal - Aplicación de técnicas estadísticas, matemáticas, computacionales u otras técnicas formales para analizar o sintetizar datos de estudio.
+	\item Adquisición de fondos - Adquisición del apoyo financiero para el proyecto que conduce a esta publicación.
+	\item Investigación - Realización de una investigación y proceso de investigación, realizando específicamente los experimentos, o la recolección de datos/evidencia.
+	\item Metodología - Desarrollo o diseño de la metodología; creación de modelos.
+	\item Administración del proyecto - Responsabilidad de gestión y coordinación de la planificación y ejecución de la actividad de investigación.
+	\item Recursos - Suministro de materiales de estudio, reactivos, materiales, pacientes, muestras de laboratorio, animales, instrumentación, recursos informáticos u otras herramientas de análisis.
+	\item Software - Programación, desarrollo de software; diseño de programas informáticos; implementación del código informático y de los algoritmos de apoyo; prueba de los componentes de código existentes.
+	\item Supervisión - Responsabilidad de supervisión y liderazgo en la planificación y ejecución de actividades de investigación, incluyendo la tutoría externa al equipo central.
+	\item Validación - Verificación, ya sea como parte de la actividad o por separado, de la replicabilidad/reproducción general de los resultados/experimentos y otros productos de la investigación.
+	\item Visualización - Preparación, creación y/o presentación del trabajo publicado, específicamente la visualización/presentación de datos.
+	\item Redacción - borrador original - Preparación, creación y/o presentación del trabajo publicado, específicamente la redacción del borrador inicial (incluyendo la traducción sustantiva).
+	\item Redacción - revisión y edición - Preparación, creación y/o presentación del trabajo publicado por los miembros del grupo de investigación original, específicamente revisión crítica, comentario o revisión - incluyendo las etapas previas o posteriores a la publicación.
+\end{itemize}
+
+\begin{center}
+	\textbf{Financiación} 
+\end{center}
+Quién financia la investigación. (12 Ptos. Just.)
+
+\fontsize{10}{10}\selectfont{\theendnotes}
+
+\par\noindent\rule{\textwidth}{0.5pt}
+
+Observaciones:
+-	No puede haber quiebras en los títulos.
+-	Las tablas complejas o con celdas combinadas deben ser trabajadas como imágenes.
+
+\end{document}

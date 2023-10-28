@@ -1,0 +1,1011 @@
+\documentclass{rcci} %[noauthor]
+
+\usepackage{hyperref}
+\usepackage{endnotes}
+\usepackage{amsbsy}
+\usepackage{svg}
+\usepackage{url}
+
+\setcounter{page}{1}
+
+\let\footnote=\endnote
+
+\newcommand{\orcidaffil}[1]{%
+	\href{https://orcid.org/#1}{#1}}
+
+\begin{document}
+\renewcommand{\figurename}{\bf Fig.}
+
+% Detalles del art�culo, t�tulo y autores
+\def\tipoarticulo{Art\'iculos originales} % Art�culos invitados | Art�culos originales | Art�culos de revisi�n | Art�culos cortos
+\def\tematica{Procesamiento de Lenguaje Natural} % Bioinform�tica | Desarrollo de aplicaciones inform�ticas | Ingenier�a y gesti�n de software | Inteligencia artificial | Matem�tica computacional | Procesamiento de im�genes | Programaci�n paralela y distribuida | Reconocimiento de patrones | Seguridad inform�tica | Sistemas digitales | Software libre | T�cnicas de programaci�n | Tecnolog�as de bases de datos | Tecnolog�as de la informaci�n y las telecomunicaciones
+\onehalfspacing
+\title{Extracci\'on autom\'atica de estructuras argumentativas en textos de opini\'on cubanos mediante proyecci\'on de etiquetas y aprendizaje profundo}
+\def\englistitle{Automatic extraction of argumentative structures in Cuban opinion texts through label projection and deep learning}
+\author[1*]{\bf Luis Ernesto Ibarra V\'azquez \orcidaffil{0000-0000-0000-0000}} % TODO orcidaffil?
+\author[2]{\bf Damian Vald\'es Santiago \orcidaffil{0000-0000-0000-0000}} % TODO orcidaffil?
+\affil[1]{Facultad de Matem\'atica y Computaci\'on, Universidad de La Habana, Cuba. Direcci�n postal. luise98cu@gmail.com} % TODO direccion postal?
+\affil[2]{Facultad de Matem\'atica y Computaci\'on, Universidad de La Habana, Cuba. Direcci�n postal. dvs89cs@matcom.uh.cu} % TODO direccion postal?
+\def\authormail{(\href{mailto:luise98cu@gmail.com}{\nolinkurl{luise98cu@gmail.com}})}
+%
+
+\maketitle
+%
+{\fontsize{12}{12}\selectfont\onehalfspacing
+\begin{abstract}
+\par\noindent
+
+% En un solo p�rrafo. El resumen tiene como objetivo orientar al lector a identificar el contenido b�sico 
+% de forma r�pida y exacta y a determinar la relevancia del contenido. Debe redactarse en tercera persona, 
+% en tiempo pasado exceptuando la frase concluyente, ser claro, descriptivo y poseer 250 palabras como m�ximo, 
+% contener \underline{los objetivos del trabajo}, \underline{la metodolog�a utilizada} y \underline{los resultados 
+% alcanzados} y finalizar con un comentario respecto al significado de los resultados o una peque�a conclusi�n. 
+% No debe incluir referencias, abreviaturas ni ecuaciones. (Times New Roman, 12 puntos, interlineado a 1.5, 
+% justificaci�n completa para el cuerpo. Si es un Resumen estructurado las secciones van seguidas de dos puntos 
+% (A/b neg) y su texto (sin negrita). Cada secci�n en una l�nea independiente).
+
+La Extracci\'on de Argumentos se realiza tradicionalmente mediante anotaci\'on
+manual de expertos en ling\"u\'istica, lo que demora mucho tiempo. 
+Este art\'iculo propone aplicar algoritmos de aprendizaje profundo 
+al campo de la Extracci\'on de Argumentos en textos de la prensa cubana, constituyendo el 
+primero de su tipo publicado  y adaptado para textos del espa\~nol de Cuba, hasta donde los autores conocen.
+Para ello, 1) se crean conjuntos de datos a partir de provenientes del idioma ingl\'es,
+2) se proponen y entrenan los modelos y 3) se anotan
+autom\'aticamente las unidades de discurso argumentativas (UDA). Los atributos
+utilizados para la representaciones de los textos son aprendidos en el proceso de entrenamiento 
+para ajustarse al criterio argumentativo de los datos.
+De los conjuntos de datos disponibles, se realiz\'o un an\'alisis de las ventajas y 
+deficiencias de cada uno para la anotaci\'on de las ``Cartas a la Direcci\'on'' del peri\'odico cubano \textit{Granma}. 
+Los resultados obtenidos en la extracci\'on de UDAs alcanzaron valores de
+F1 = 0,82 comparados con 0,85 del estado del arte.
+En las dem\'as tareas, los resultados no son directamente comparables con los del estado del arte, 
+los mejores valores F1 obtenidos fueron 0,56 en la clasificaci\'on de UDAs, 0,74 en la predicci\'on
+de enlaces y 0,39 en la clasificaci\'on de enlaces.
+\vskip 1em
+\keywords{Extracci\'on de argumentos; procesamiento de lenguaje natural; aprendizaje profundo.}
+% \textit{Entre 4 y 5 palabras clave, las cuales deben reflejar el contenido central del trabajo y ayudar a indizar el art�culo.}
+\vskip 2em
+\englishabstract{\vskip 0.5em \normalfont{Argument Extraction is traditionally performed by manual annotation by linguistic experts, which takes lots of time. 
+This paper proposes deep learning algorithms to perform the Argument Extraction in 
+Cuban press texts, constituting the first of its kind published and adapted for Cuban Spanish texts, as far as the authors 
+knowledge. To this end, 1) datasets are created by annotation projection from other ones in English language, 2) models are proposed and trained, 
+and 3) automatic annotation of Argumentative Discourse Units (ADUs) is performed. The features used for text representations
+are learned in the training process to match the argumentative criteria of the data. From the available data sets, an analysis 
+of the advantages and deficiencies of each one was made for the annotation of the ``Letters to the Editor'' of the Cuban newspaper
+\textit{Granma}. 
+The results obtained in the extraction of ADUs reached values of F1 = 0.82 compared to 0.85 of the state of the art. In 
+the other tasks, the results are not directly comparable with those of the state of the art, 
+the best F1 values obtained 
+were 0.56 in ADU classification, 0.74 in link prediction and 0.39 in link classification.}}
+\vskip 1em
+\englishkeywords{Argument extraction; natural language processing; deep learning.}
+\vskip 1em
+\end{abstract}}
+
+
+\section*{Introducci\'on }
+\vskip 1em
+% En las referencias solo se incluyen los trabajos citados expl�citamente en el texto. Evite el uso de fuentes no 
+% confiables. Toda la bibliograf�a usada debe estar acotada en el cuerpo del documento siguiendo las pautas de las 
+% normas ISO 690 de la forma (Apellido, a�o). Ejemplos: de forma simple \citep{Smith:2012qr} o m�ltiple 
+% \citep{Smith:2012qr,Smith:2013jd}.
+
+% Los p�rrafos se escribir�n en Times New Roman a 12 puntos, con espaciado 1.5, justificado y una l�nea en blanco 
+% como separador (usando solo enter como separador).
+
+% \textit{La introducci�n constituye una presentaci�n del tema y debe incluir los objetivos trazados, exponer 
+% brevemente los trabajos m�s relevantes y destacar las contribuciones de otros autores al tema objeto de estudio, 
+% as� como justificar las razones por las que se realiza la investigaci�n.}
+
+% HERE STARTS
+
+La argumentaci\'on es una actividad verbal, social y racional destinada a convencer 
+a un cr\'itico razonable de la aceptabilidad de un punto de vista mediante la presentaci\'on 
+de proposiciones que justifican o refutan la proposici\'on expresada 
+en el punto de vista \cite{van2004systematic}.
+
+Varias tareas en el Procesamiento de Lenguaje Natural (PLN) se han desarrollado alrededor
+de diferentes problemas relacionados con 
+la argumentaci\'on. Entre estas se encuentran: el minado de opiniones, sentimientos y 
+emociones expresadas en un texto 
+\cite{liu2010sentiment}, la detecci\'on de controversias, y la zonificaci\'on
+argumentativa. 
+
+Es necesario realizar un 
+an\'alisis de los argumentos dados, para transformar el texto no estructurado a datos argumentativos 
+que permitan el entendimiento de los puntos de vista y de c\'omo se ``apoyan'' o ``atacan'' entre s\'i. Este an\'alisis
+es posible realizarlo manualmente o utilizando programas
+especializados para la anotaci\'on, aunque la pr\'actica ha demostrado que este proceso requiere 
+de una gran cantidad de tiempo y de personal calificado \cite{eger2018cross}. 
+
+La Extracci\'on de Argumentos (EA) es la rama del PLN encargada
+del estudio de m\'etodos para la extracci\'on autom\'atica de las estructuras argumentativas de 
+los textos y su posterior procesamiento \cite{lawrence2020argument}. Esta tarea se divide en 
+cuatro subtareas fundamentales: i) la extracci\'on y ii) clasificaci\'on de las componentes 
+argumentativas del texto, y iii) la extracci\'on y 
+iv) clasificaci\'on de las relaciones entre estas. 
+
+La EA se caracteriza por la poca disponibilidad de datos anotados y 
+por la heterogeneidad de las 
+anotaciones. Adem\'as, la gran mayor\'ia de los estudios realizados en el campo se encuentran en 
+idiomas como el ingl\'es, alem\'an o chino \cite{eger2018cross}. 
+En espa\~nol, se reportan pocas investigaciones del an\'alisis de los argumentos \cite{esteve2020mineria} y, en 
+Cuba, no se encontr\'o ninguna referencia, seg\'un la b\'usqueda de literatura cient\'ifica
+realizada por los autores.
+
+El objetivo, de esta investigaci\'on es proponer un algoritmo basado en aprendizaje profundo 
+para la extracci\'on y an\'alisis de estructuras argumentativas en textos 
+de la prensa cubana (en particular, la secci\'on ``Cartas a la Direcci\'on'' del per\'iodico \textit{Granma}), 
+constituyendo el primero de su tipo publicado y adaptado para
+textos del espa\~nol de Cuba, hasta donde los autores conocen. 
+Para lograr dicho objetivo, en primer lugar, es necesario obtener mediante \textit{crawling} los textos a analizar del sitio 
+web del peri\'odico \textit{Granma}. Luego, se proponen algoritmos de aprendizaje autom\'atico capaces de realizar las tareas 
+de EA sobre estos textos, que requiren conjuntos 
+de datos anotados en espa\~nol sobre los cuales se puedan entrenar.
+
+Para la extracci\'on
+de argumentos se presentan dos modelos, el primero se encarga de la segmentaci\'on y clasificaci\'on
+de las componentes argumentativas mediante la clasificaci\'on de los \textit{tokens} en etiquetas BIOES, que % TODO citar las etiquetas BIOES
+delimitan y clasifican las unidades de discurso argumentativas (UDA). En el segundo, se analizan 
+las posibles relaciones entre UDAs de manera independiente para saber si est\'an relacionadas o no y
+el tipo de relaci\'on existente. Los modelos utilizan 
+redes neuronales convolucionales (CNN, en ingl\'es), \textit{Long Short Term Memory} (LSTM, en ingl\'es) \cite{hochreiter1997long} y \textit{Conditional Random Field} (CRF, en ingl\'es) \cite{lafferty2001conditional}
+como elementos principales en sus arquitecturas, adem\'as se emplean vectores GloVe \cite{pennington2014glove} para la representaci\'on
+de las palabras. 
+
+El art\'iculo se divide en varias secciones. Primero, se presentan las definiciones 
+relativas a la argumentaci\'on y la EA. Luego, se presenta 
+un estado del arte de la EA con una discusi\'on de las
+ventajas y desventajas de cada enfoque y se introduce la proyecci\'on de corpus. M\'as adelante, 
+se presentan los modelos propuestos para resolver el problema en 
+cuesti\'on. A continuaci\'on se muestran los resultados del entrenamiento de los modelos y en 
+la anotaci\'on de los textos de ``Cartas a la Direcci\'on''. Finalmente, se exponen las conclusiones y 
+recomendaciones de la investigaci\'on.
+
+\parskip=12pt
+\section*{M\'etodos o Metodolog\'ia Computacional}\label{metodos}
+
+% Los p�rrafos se escribir�n en Times New Roman a 12 puntos y con espaciado 1,5 y una l�nea en blanco como 
+% separador. 
+
+% \textit{En esta secci�n se explica c�mo se hizo la investigaci�n. Se describe el 
+% dise�o de la misma y se explica c�mo se llev� a la pr�ctica, justificando la elecci�n de
+% m�todos y t�cnicas de forma tal que un lector pueda repetir el estudio.}
+
+
+La EA consiste en la identificaci\'on y extracci\'on 
+autom\'atica de las estructuras de inferencia y 
+razonamiento expresadas como argumentos presentes en el lenguaje natural \cite{lawrence2020argument}.
+La EA permite dar respuesta a este problema presentando
+los argumentos y c\'omo sus relaciones justifican las posiciones del hablante. Dicho problema est\'a constituido por diferentes 
+estructuras y se compone de distintas tareas necesarias para su soluci\'on.
+
+Existen diferentes estudios que conforman una metodolog\'ia de an\'alisis para
+identificar los argumentos. El modelo de Toulmin \cite{toulmin_2003} introduce categor\'ias 
+con distintas funciones dentro de la argumentaci\'on. En 
+el idioma espa\~nol existen rasgos ling\"u\'isticos que, adem\'as de dar indicaci\'on de la existencia de argumentos, 
+dan pie para conocer las relaciones entre estos y los tipos de argumentos. \citep{venegas2005hacia}
+determina 16 categor\'ias y 51 rasgos ling\"u\'isticos, dando una idea de la gran variedad de marcadores 
+presentes en la argumentaci\'on.
+
+\subsubsection*{Estructuras Argumentativas}
+
+Las estructuras argumentativas son las partes de la argumentaci\'on de los textos y sus relaciones.
+Estas se componen de dos elementos principales: las Unidades de Discurso Argumentativas (UDAs) y los enlaces
+o relaciones existentes entre estas. Las UDAs corresponden a la unidad m\'inima de argumentaci\'on, definida 
+como un segmento de texto que juega un solo rol para el argumento analizado, y es 
+delimitado por segmentos vecinos que tienen roles diferentes o ning\'un rol \cite{stede2018argumentation}.
+
+Las UDAs se relacionan entre s\'i conformando el proceso de inferencia y razonamiento del argumento.
+Tanto los enlaces como las UDAs son clasificados en dependencia de su rol en la argumentaci\'on. Estas clasificaciones 
+parten de los conceptos de afirmaci\'on, declaraci\'on controversial y parte central del argumento, y premisa, % TODO Poner referencias a los conceptos, o eliminarlos
+razones que la justifican o refutan, y en las relaciones de ataque y apoyo. 
+
+\subsubsection*{Tareas de extracci\'on de argumentos}
+
+Dada la definici\'on de estructuras argumentativas y que el objetivo de la EA es extraerlas,
+se conciben las siguientes tareas principales:
+
+\begin{enumerate}
+	\item Extracci\'on de UDAs: separar los segmentos de texto que formar\'an parte de la UDA.
+	\item Clasificaci\'on de UDAs: asignar una categor\'ia argumentativa a la UDA segmentada.
+	\item Extracci\'on de relaciones entre las UDAs: determinar si est\'an relacionadas las UDAs o no.
+	\item Clasificaci\'on de relaciones entre las UDAs: asignar una categor\'ia a la relaci\'on extra\'ida.
+\end{enumerate}
+
+\subsubsection*{Variantes para la Extracci\'on de Argumentos}
+
+Varias investigaciones han dado respuesta a los problemas asociados a EA, mostrando
+una variedad en enfoques y m\'etodos. Para la segmentaci\'on de las UDAs se ha separado
+en oraciones y luego clasificado cada una en si es UDA o no mediante algoritmos como 
+\textit{Naive Bayes} (NB) y m\'aquinas de soporte vectorial (SVM, en ingl\'es) \cite{palau2009argumentation,goudas2015argument}.
+Otras aproximaciones para esta tarea consiste en la clasificaci\'on en etiquetas BIO
+de los \textit{tokens} del texto \cite{goudas2015argument,stab2017parsing,eger2017neural} y en el uso de
+reglas basadas en anotaciones ling\"u\'isticas \cite{dykes2020reconstructing}.
+
+En las tareas de predicci\'on y clasificaci\'on de enlaces se han empleado gram\'aticas libre de contexto 
+basadas en anotaciones de los \textit{tokens} \cite{palau2009argumentation}. SVM y aprendizaje profundo han sido utilizados para clasificar 
+las posibles relaciones dos a dos \cite{goudas2015argument,galassi2021deep}, en \citep{goudas2015argument}
+se optimiza la estructura final con un problema de optimizaci\'on lineal en enteros.
+
+Las UDAs y las relaciones han sido representadas de diferentes maneras, ya sea por 
+atributos escogidos a mano mediante conocimiento experto \cite{palau2009argumentation,goudas2015argument}, como
+por atributos aprendidos por los algoritmos en la fase de entrenamiento \cite{eger2017neural,galassi2021deep}.
+
+En los modelos propuestos (ver secciones \ref{ssec:segm_clsf_uda} y \ref{ssec:pred_clsf_enlaces}), gran parte de las representaciones son aprendidas en el proceso de 
+entrenamiento y las que se agregan de forma manual casi no influyen en la escalabilidad del sistema.
+Cuando se trata de unir los resultados de los dos modelos, hay una propagaci\'on de errores, 
+aunque se utiliza el modelado de problemas conjuntos para minimizarlo.
+
+\subsubsection*{Proyecci\'on de etiquetas} %% RESUMED
+
+La proyecci\'on de etiquetas es un algoritmo donde se 
+transfieren las etiquetas de un corpus anotado a nivel de \textit{tokens} en un lenguaje origen hacia su traducci\'on en un
+lenguaje objetivo. En \cite{eger2018cross} se propone un algoritmo de proyecci\'on a partir de las alineaciones de 
+palabras. El proceso se divide en varias partes:
+
+\begin{enumerate}
+	\item Traducci\'on autom\'atica de oraciones: proceso de
+	traducir autom\'aticamente texto de un lenguaje fuente a un lenguaje objetivo.
+	\item Alineaci\'on de palabras: consiste en asignar las palabras del lenguaje fuente
+	a sus equivalentes generadas en el lenguaje objetivo.
+	\item Proyecci\'on de etiquetas: consiste en transformar las etiquetas de las palabras en la secuencia origen
+	hacia las palabras de la secuencia destino tomando como datos las alineaciones entre estas.
+\end{enumerate}
+
+\subsection*{Segmentaci\'on y clasificaci\'on de UDAs}
+
+Las tareas de segmentaci\'on y clasificaci\'on de UDAs se resuelven conjuntamente. Para esto se modela 
+como un problema secuencia a secuencia cuyo objetivo es asignar, a los \textit{tokens} extra\'idos del documento 
+entrada, una etiqueta BIOES para segmentar las UDAs. Para la clasificaci\'on del tipo 
+de UDA, al conjunto de etiquetas BIES se le a\~nade otra etiqueta que representa el tipo de UDA. Con 
+este esquema se obtiene una cantidad de etiquetas $|\{B,I,E,S\}| \cdot |p{3cm}lasificaciones \, de \, UDA| + |\{O\}|$.
+
+\subsubsection*{Modelo de segmentaci\'on y clasificaci\'on de UDAs}\label{ssec:segm_clsf_uda}
+
+Sea $D$ un documento entrada, este es separado en una secuencia de $n$ \textit{tokens} $D_i$, donde $n$ es la mayor longitud encontrada
+en los documentos del conjunto de datos (si la cantidad de \textit{tokens} es menor que $n$ entonces $D_i$ es completado con un \textit{token} especial de enmascarado). 
+A cada \textit{token} se le asigna
+su representaci\'on vectorial GloVe de dimensi\'on $g=300$, dando como resultado $G_{ij} \in \mathbb{R}^{n \times g}$.
+Esta representaci\'on inicial presenta informaci\'on sem\'antica de las palabras y conserva las relaciones 
+espaciales entre ellas. 
+
+Para la representaci\'on de informaci\'on morfol\'ogica de la palabra se construyen dos
+codificadores que procesan los caracteres de cada \textit{token} y devuelven una representaci\'on vectorial de estos.
+A cada caracter se le asigna un vector que ser\'a entrenado convirtiendo un \textit{token} en un vector de dimensi\'on
+$q \times c$, donde $q$ es el tama\~no m\'aximo de palabra en el conjunto de datos y $c$ es la dimensi\'on del vector
+asignado a cada caracter.
+
+Uno de los modelos entrenados est\'a basado en CNN, este modelo entrena una representaci\'on de caracteres de dimensi\'on
+$cd=50$, representando un \textit{token} como un vector de dimensi\'on $q \times cd$. Se conforma por una capa de convoluci\'on unidimensional
+con $f=30$ filtros y un kernel de tama\~no $k=3$, seguida por una capa \textit{max pooling} que convierte la secuencia en un vector
+de dimensi\'on $1 \times f$, que luego es concatenado a la representaci\'on del \textit{token} a que pertenece.
+
+Otro modelo utilizado para calcular una representaci\'on morfol\'ogica est\'a basado en RNN. Se us\'o
+un modelo LSTM bidireccional con dimensi\'on $l=25$ para calcular la representaci\'on del \textit{token}, para las dimensiones de los caracteres se
+utilizaron vectores de tama\~no $l$, el resultado final constituye la concatenaci\'on de la corrida hacia adelante y
+hacia atr\'as, formando una representaci\'on de dimensi\'on $1 \times 2 \cdot l$ del \textit{token}. Este vector es concatenado a la representaci\'on
+del \textit{token} correspondiente. 
+
+Otro atributo usado en la representaci\'on de los \textit{tokens} constituyen las etiquetas de 
+partes de la oraci\'on de estos.
+El conjunto de etiquetas elegido es un conjunto universal \cite{petrov2011universal} aplicable a muchos idiomas.
+Estas etiquetas se representan como un vector al que se le asigna 1 en la posici\'on correspondiente a la clase y 0 en 
+los otros elementos (codificaci\'on \textit{one-hot}) y este es transformado por una capa densa con $p=5$ neuronas
+y funci\'on de activaci\'on \textit{ReLU}. El resultado se concatena a la representaci\'on del \textit{token} correspondiente. Mediante 
+la extracci\'on de estos atributos el \textit{token} es representado en tres maneras: sem\'antica, morfol\'ogica y estructural, con el 
+objetivo de que sean aprendidos los rasgos ling\"u\'isticos correspondientes.
+
+Del proceso de vectorizaci\'on se obtiene un vector con dimensi\'on $n \times t$, donde $t$ es la dimensi\'on final de la representaci\'on
+de los \textit{tokens}  Este vector es modificado por una capa LSTM bidireccional de dimensi\'on $m=200$. A esta salida se le 
+a\~nade una conexi\'on residual al ajustarle la dimensi\'on con una capa densa. Luego, la secuencia es procesada por una 
+capa densa de dimensi\'on $k=100$ con activaci\'on \textit{ReLU}, produciendo una representaci\'on final de dimensi\'on 
+$n \times k$. Finalmente, se utiliza una capa CRF
+para la clasificaci\'on final de la secuencia en las etiquetas finales. El resultado final constituye un vector
+de dimensi\'on $n$ que representa las clasificaciones inferidas por el modelo (Figura \ref{fig:segmenter_model}).
+
+Para prevenir el sobreajuste se agregaron capas de normalizaci\'on y de \textit{dropout} (0.5) entre cada proceso y se usaron regularizaciones
+L2 y \textit{dropout} en las capas densas y LSTM. 
+Para prevenir el sobreentrenamiento se aplic\'o una 
+terminaci\'on temprana cuando no se encontr\'o una mejora de la funci\'on de p\'erdida en el conjunto de validaci\'on
+por m\'as de 10 \'epocas consecutivas. Como optimizador se utiliz\'o Adam con una tasa de aprendizaje de $0.001$.
+
+La salida del modelo es procesada para eliminar los errores en las etiquetas BIOES, errores como segmentos 
+que no empiecen en B o terminen en E, o segmentos con m\'as de una clasificaci\'on, 
+obteniendo as\'i un formato BIOES v\'alido.
+
+\begin{figure}[!h]
+	\begin{center}
+		\includesvg[width=7cm]{Graphics/Modelo_Segmenter_UDA_No_Opcional.svg}
+	\end{center}
+	\caption{\fontsize{11}{12}\selectfont Segmentador de UDAs.}
+	\label{fig:segmenter_model}
+\end{figure}
+
+\subsection*{Predicci\'on y clasificaci\'on de enlaces}
+
+Las tareas de extracci\'on y clasificaci\'on de enlaces son modeladas de forma conjunta.
+El problema consiste en clasificar pares de UDAs, representando origen y objetivo del enlace, 
+en el tipo de relaci\'on que existen entre estas.
+Como tarea auxiliar se clasifican los tipos de UDAs que intervienen en la relaci\'on. La salida 
+del modelo constituye en una tupla de tres elementos: la clasificaci\'on de la relaci\'on, 
+la clasificaci\'on de la UDA origen, la clasificaci\'on de la UDA objetivo. Si el enlace
+existe o no, es calculado a partir del vector de probabilidades obtenido de la clasificaci\'on de la relaci\'on.
+
+\subsubsection*{Modelo de predicci\'on y clasificaci\'on de enlaces}\label{ssec:pred_clsf_enlaces}
+
+Sean dos UDAs, $S$ y $T$, donde $S$ representa la fuente de la relaci\'on, mientras que $T$ representa
+al objetivo. Estas secuencias son tokenizadas y se les asigna la representaci\'on GloVe de cada palabra, obteniendo
+dos vectores de dimensi\'on $u \times g$, donde $u$ es el tama\~no m\'aximo de UDAs en el conjunto de entrenamiento
+y $g=300$ es la dimensi\'on del \textit{embedding}.
+
+Estos vectores son modificados por una red densa compuesta por $ca = 4$ capas con activaci\'on \textit{ReLu}
+de dimensiones $50$, $50$, $50$ y $300$ respectivamente, a\~nadiendo una conexi\'on residual a la salida de esta. 
+El pr\'oximo paso consiste en aplicar una capa densa de dimensi\'on $di=50$ y luego un \textit{average pooling}
+de tama\~no $dp=10$, obteniendo vectores de dimensi\'on $\frac{q}{dp} \times di$. 
+Estos vectores son modificados por un LSTM bidireccional con $lm=50$ unidades. 
+
+La salida de los procesamientos es concatenada con la distancia argumentativa, obteniendo una representaci\'on 
+conjunta de la relaci\'on a analizar. Esta representaci\'on es modificada por una red residual obteniendo
+una representaci\'on final de dimensi\'on $l=20$ y luego sometida a los clasificadores de relaci\'on y de tipos de UDAs
+(Figura \ref{fig:link_predictor_model1}).
+
+Para prevenir el sobreajuste se agregaron capas de normalizaci\'on y de \textit{dropout} entre cada 
+proceso y se usaron regularizaciones L2 y \textit{dropout} en las capas densas y LSTM, 
+todos los \textit{dropout} tienen valor $dr=0,1$. Para prevenir el sobreentrenamiento se aplic\'o una 
+terminaci\'on temprana cuando no se encontr\'o una mejora de la funci\'on de p\'erdida en el 
+conjunto de validaci\'on durante $v=5$ \'epocas consecutivas. Como optimizador se utiliz\'o el algoritmo de Adam con descenso 
+exponencial y tasa de aprendizaje $lr=0.003$.
+
+Dado que se realiza un aprendizaje de varias tareas, se tienen varias funciones de p\'erdida individuales que conforman 
+la funci\'on de p\'erdida final $e$. Sea $e_r$ la funci\'on de p\'erdida de la clasificaci\'on de la relaci\'on, $e_s$ la del tipo de UDA origen  
+y $e_t$ del tipo de UDA objetivo, entonces $e = 10 \cdot e_r + e_s + e_t$ \cite{galassi2021deep}.
+
+\subsubsection*{Preprocesamiento de predicci\'on y clasificaci\'on de enlaces}
+
+Las UDAs extra\'idas son agrupadas de dos en dos y anotadas con su distancia argumentativa, solo seleccionando
+los pares que no se enlacen con ellos mismos y que su distancia sea menor que $10$ (Para disminuir el n\'umero 
+de pares a analizar). Al conjunto de entrenamiento se a\~nade las representaciones inversas de las relaciones, por ejemplo, si $a \xrightarrow{c} b$ entonces 
+se agregara el par $b \xrightarrow{c^{-1}} a$, donde $c^{-1}$ es una nueva clasificaci\'on de relaci\'on que representa
+el inverso de la clasificaci\'on $c$. Este proceso se realiza para aumentar la cantidad de relaciones positivas en el
+conjunto entrenante.
+
+\subsubsection*{Posprocesamiento de predicci\'on y clasificaci\'on de enlaces}
+
+A partir de la distribuci\'on de probabilidades de las relaciones devueltas por el modelo,
+se calcula si el par est\'a enlazado o no. Para esto, las categr\'ias vinculadas a las clases de relaciones 
+originales se suman, y si superan el 50\%, se considera enlazado el par.
+
+\begin{figure}[!h]
+	\begin{center}
+		\includesvg[width=8cm]{Graphics/Modelo_Link_Prediction_No_Atencion1.svg}
+		\includesvg[width=8cm]{Graphics/Modelo_Link_Prediction2.svg}
+	\end{center}
+	\caption{\fontsize{11}{12}\selectfont Predictor de enlaces.}
+	\label{fig:link_predictor_model1}
+\end{figure}
+
+\subsection*{Conjuntos de Datos}
+
+Para el entrenamiento de los modelos propuestos se utilizaron corpus diferentes, estos
+presentan esquemas de anotaci\'on distintos entre s\'i, difiriendo principalmente en la definici\'on de UDA y 
+las clasificaciones dadas a estas y a las relaciones.
+
+Todos los conjuntos de datos est\'an originalmente en ingl\'es, por lo tanto, se les aplic\'o el algoritmo de proyecci\'on
+de corpus para obtener uno en espa\~nol para ser usado en el entrenamiento de los modelos.
+
+Para la traducci\'on autom\'atica se utiliz\'o el servicio de Google Translate,
+obteniendo las alineaciones de palabras con AwesomeAlign \cite{dou2021word}.
+Con estos datos se realiz\'o la proyecci\'on de etiquetas con el algoritmo propuesto 
+por \citep{eger2018cross}.
+
+\subsubsection*{Corpus Ensayos Argumentativos}\label{corpus:persuasive_essays}
+
+Este corpus \cite{stab2017parsing} presenta 402 documentos, divididos por los autores en 286 documentos para entrenamiento (70\%), 
+80 para prueba (20\%) y 36 para validaci\'on (10\%). El corpus contiene ensayos de estudiantes en los que 
+se argumentan sobre temas como cooperar o competir y sobre las contribuciones de la tecnolog\'ia a la sociedad.
+Las anotaciones de las UDAs se conforman por segmentos de textos argumentativos,
+clasificados en \textit{MajorClaim} con 751 (12\%), \textit{Claim} con 1506 (25\%) y \textit{Premise} con 3832 (63\%).
+
+La estructura de las relaciones entre los UDAs conforman \'arboles en los que las \textit{Major Claim} 
+del texto son las raices. Solo se permiten relaciones entre \textit{Premise-Premise} y \textit{Premise-Claim}, 
+clasificados en ataque con 219 (6\%) y apoyo con 3613 (93\%). Las relaciones entre \textit{Claim} y \textit{MajorClaim} 
+se indican de manera diferente, con una calificaci\'on de la \textit{Claim} de si est\'a a favor (1228) o en contra (278) de las \textit{MajorClaim} 
+del documento. Estas anotaciones se convirtieron en relaciones de \textit{attack} y \textit{support} respectivamente, 
+lo que result\'o en un n\'umero final de 715 (10 \%) de ataque y 5958 (90 \%) de soporte.
+
+\subsubsection*{CDCP}\label{corpus:cdcp}
+
+El corpus CDCP \cite{niculae2017argument} est\'a conformado por 731 comentarios de usuarios extra\'idos de la web sobre el tema de 
+pr\'acticas de cobro de deudas a los consumidores.
+Las UDAs se encuentran segmentadas en oraciones y todas se consideran argumentativas.
+Est\'an clasificadas en 
+\textit{policy} con 815 (17\%), \textit{value} con 2180 (44\%), \textit{fact} con 
+785 (16\%), \textit{testimony} con 1116 (22\%) y \textit{reference} con 32 (1\%). 
+Las relaciones se encuentran clasificadas en \textit{reason} con 1352 (95\%) y \textit{evidence} con 73 (5\%).
+
+\subsubsection*{AbsTRCT}
+
+El corpus AbsTRCT \cite{mayer2020transformer} se compone de 500 documentos sobre el estudio de cuatro enfermedades diferentes:
+glaucoma, hipertensi\'on, hepatitis B y diabetes. Cada oraci\'on es una UDA, aunque no todas son consideradas
+argumentativas. Estas se clasifican en \textit{MajorClaim} con 93 (3\%), \textit{Claim} con 993 (30\%) y \textit{Premise} con 2198 (67\%).
+Las relaciones est\'an representadas por tres categor\'ias: \textit{support} con 1763 (85\%), \textit{partial-attack} con 238 (12\%) y
+\textit{attack} con 60 (3\%).
+
+Estos conjuntos de datos son peque\~nos para los modelos a entrenar, adem\'as, presentan desbalance en las clases 
+existentes.
+
+\subsubsection*{Cartas a la Direcci\'on}
+
+La secci\'on ``Cartas a la Direcci\'on'' \cite{gallego2013cartas} es un segmento del peri\'odico \textit{Granma} donde se publican
+cartas enviadas por la poblaci\'on o empresas a dicha entidad. En general, las cartas 
+presentan dudas o problemas de la poblaci\'on con el objetivo de obtener respuestas del organismo
+asociado. 
+
+Mediante \textit{crawling}, se extrajeron 2891 cartas desde el 30 de agosto del 2013 hasta el 28 de octubre del 2022. Estas 
+contienen aproximadamente 975000 palabras en los datos y, en promedio, la cantidad de palabras por carta es 330.
+Se encontraron 874 cartas en respuesta a cartas enviadas, lo que representa un 30\% del total. 
+De las cartas, se seleccionaron las que fueran en respuesta a otra y tambi\'en las 
+cartas que fueron respondidas para tener una mayor concentraci\'on de cartas que fueran argumentativas, 
+esta selecci\'on est\'a conformada por 1702 cartas, lo que representa un 59\% del total de cartas.
+
+\section*{Resultados y discusi\'on}
+
+% Los p�rrafos se escribir�n en Times New Roman a 12 puntos y con espaciado 1,5 y una l�nea en blanco 
+% como separador.
+
+% \textit{Los resultados obtenidos se exponen despu�s de explicar las t�cnicas seleccionadas y descritas en 
+% la secci�n anterior. Los mismos deben apoyarse por el uso de las tablas, figuras y diagramas, que expresan 
+% de forma clara los resultados del estudio realizado por los autores. }
+
+% \textit{Se espera encontrar en esta secci�n aquellos elementos que hacen que la investigaci�n presentada 
+% constituya una novedad o una mejora en su campo de acci�n y su superioridad con respecto a soluciones similares.  
+% Se debe enfatizar en la validaci�n del resultado y su posible aplicaci�n en contextos diferentes al reportado en el
+% art�culo. En la parte de la discusi�n se presenta el an�lisis de los resultados obtenidos que deben corresponder 
+% a los objetivos planteados en el art�culo y su contraste y comparaci�n con lo reportado previamente en la literatura
+% cient�fica.}
+
+% Cuando en el texto tenemos una relaci\'on en forma de lista, se utilizar\'a forma num\'erica:
+% \begin{enumerate}
+% 	\item Texto. 
+% 	\begin{enumerate}
+% 		\item Texto. 
+% 		\begin{enumerate}
+% 			\item Texto. 
+% 		\end{enumerate}
+% 		\item Texto.
+% 	\end{enumerate}
+% 	\item Texto.
+% \end{enumerate}  
+
+% Todas las tablas y figuras deber\'an ser mencionadas en el texto. A continuaci\'on vea una ejemplo de la Figura 
+% \ref{fig:ejemplo} y de la Tabla \ref{tab:actions_classification}.
+
+
+% \begin{figure}[!h]	
+% \begin{center}
+% 	\includegraphics[width=0.5\textwidth]{picture.png}
+% \end{center}
+% \caption{\fontsize{11}{12}\selectfont El t\'itulo de las figuras se colocar\'a en la parte inferior, centrado, 
+% utilizando numeraci\'on secuencial seg\'un el orden en que aparecen en el trabajo.}
+% \label{fig:ejemplo}
+% \end{figure}
+
+
+% \begin{table}[!ht]
+% \centering
+% \caption{\fontsize{11}{12}\selectfont El t\'itulo de las tablas en la parte inferior, centrado, utilizando 
+% numeraci\'on secuencial seg\'un el orden en que aparecen en el trabajo.}
+% \label{tab:actions_classification} 
+% \begin{threeparttable}[b]
+% 	\fontsize{9}{11}\selectfont{
+% \begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+% 	\hline 
+% 	\textbf{} & \textbf{Columna 1} & \textbf{Columna 2} & \textbf{Columna 3}\\
+% 	\hline 
+% 	\textbf{Fila 1} & x\tnote{a}  & y & z\\
+% 	\hline 
+% 	\textbf{Fila 2} & x  & y & z\tnote{b}\\
+% 	\hline
+% \end{tabular}
+% }
+% \begin{tablenotes}
+% \item [a] \fontsize{8}{10}\selectfont{De emplear notas aclaratorias se colocar\'an al pie de la tabla.} \\
+% \item [b] \fontsize{8}{10}\selectfont{Otra nota aclaratoria.}
+% \end{tablenotes}
+% \end{threeparttable}
+% \end{table}
+
+% Si se desea usar alguna ecuaci\'on:
+% \begin{equation}\label{key}
+% 	Raz\acute{o}n\ de\ tasa\ de\ mortalidad_{\ causa\ X} = \dfrac{Tasa\ de\ mortalidad\ masculina_{\ causa\ X}}{Tasa\ de\ mortalidad\ femenina_{\ causa\ X}}
+% \end{equation}
+
+% Texto\footnote{Notas aclaratorias del texto, estas estar\'an ubicadas al final del trabajo.} Si se quiere hacer 
+% un llamado para una nota aclaratoria \endnote{Esta es otra nota al final} (este va en super\'indice, pero NO 
+% entre par\'entesis).
+
+% HERE STARTS
+
+Para realizar la selecci\'on del modelo se utiliz\'o el corpus de Ensayos Argumentativos. Con este se ajustaron
+las arquitecturas e hiperpar\'ametros de los modelos propuestos. La mejor combinaci\'on de estos fue utilizada 
+para el entrenamiento de los corpus restantes. Finalmente, los modelos fueron utilizados para anotar los 
+textos de la secci\'on ``Cartas a la Direcci\'on'' de \textit{Granma}. 
+
+\subsubsection*{Segmentador de UDA}
+
+El modelo seleccionado fue usado en el entrenamiento de los dem\'as conjuntos de datos obteniendo los resultados mostrados
+en Tabla \ref{table:test_metrics_segmenter} y Tabla \ref{table:test_bioes_metrics_segmenter}.
+
+Las m\'etricas 50\%F1 y 100\%F1 \cite{persing2016end} est\'an
+basadas en la idea de la m\'etrica F1, pero orientada a secuencias, donde el n\'umero denota el porcentaje de secuencia inferida que debe coincidir con 
+la secuencia anotada para ser considerado una coincidencia.
+
+
+\begin{table}[!ht]
+	\centering
+	\caption{\fontsize{11}{12}\selectfont M\'etricas de las pruebas del segmentador de UDA.}
+	\label{table:test_metrics_segmenter}
+	\begin{threeparttable}[b]
+		\fontsize{9}{11}\selectfont{
+	\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|} 
+		\hline
+		\textbf{ Corpus} & \textbf{ Ensayos} 		& \textbf{ CDCP} & \textbf{ AbsTRCT} \\ 
+						 & \textbf{ Argumentativos} & 			 & 				 		 \\ 
+		\hline
+		F1 Ponderado 				 & 0,76         		& 0,65     	 & 0,86          \\
+		\hline
+		Macro F1                     & 0,56         		& 0,45     	 & 0,50          \\
+		\hline
+		\textit{Accuracy}            & 0,77         		& 0,66     	 & 0,87          \\ 
+		\hline
+		100\%F1						 & 0,72         		& 0,61     	 & 0,61          \\ 
+		\hline
+		50\%F1                		 & 0,83         		& 0,68     	 & 0,75          \\ 
+		\hline
+	\end{tabular}
+	}
+	\end{threeparttable}
+\end{table}
+
+
+\begin{table}[!ht]
+	\centering
+	\caption{\fontsize{11}{12}\selectfont M\'etricas BIOES de las pruebas del segmentador de UDA.}
+	\label{table:test_bioes_metrics_segmenter}
+	\begin{threeparttable}[b]
+		\fontsize{9}{11}\selectfont{
+		\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|} 
+			\hline
+			\textbf{ Corpus}                 & \textbf{ Ensayos} 		& \textbf{ CDCP} & \textbf{ AbsTRCT} \\ 
+											 & \textbf{ Argumentativos} & 			     & 				 \\ 
+			\hline
+			F1 Ponderado 				 & 0,89         		& 0,95     	 & 0,90          \\
+			\hline
+			Macro F1                     & 0,82         		& 0,56     	 & 0,79          \\
+			\hline
+			\textit{Accuracy}            & 0,89         		& 0,96     	 & 0,91          \\ 
+			\hline
+			100\%F1                		 & 0,81         		& 0,82     	 & 0,66          \\ 
+			\hline
+			50\%F1                		 & 0,94         		& 0,93     	 & 0,82          \\ 
+			\hline
+		\end{tabular}
+	}
+	\end{threeparttable}
+\end{table}
+
+En las tablas se observa una diferencia entre los valores de F1 Ponderado y 
+de Macro F1, dadas por el pobre balance de las clases que hace que las menos
+representadas sean m\'as dif\'iciles de ser correctamente anotadas. Los valores
+mayores de 50\%F1 en comparaci\'on con 100\%F1 indican que el modelo logra 
+inferir las posiciones de las UDA de manera general, pero sus l\'imites se hacen 
+m\'as complejos de discernir. 
+
+\subsubsection*{Predictor de Enlaces}
+
+Para el modelo se realiz\'o un voto conjunto del ensamblado de tres modelos, dado que el entrenamiento 
+est\'a basado en la aleatoriedad, se entrenan los modelos con los mismos datos obteniendo inferencias no
+necesariamente iguales.
+
+En el entrenamiento del modelo en los dem\'as conjuntos de datos se obtuvieron los resultados de las Tablas 
+\ref{table:test_relation_metrics_link_predictor_relation_classification} y 
+\ref{table:test_relation_metrics_link_predictor_link_prediction}.
+
+\begin{table}[!ht]
+	\centering
+	\caption{\fontsize{11}{12}\selectfont M\'etricas de clasificaci\'on de relaciones de las pruebas del predictor de enlace.}
+	\label{table:test_relation_metrics_link_predictor_relation_classification}
+	\begin{threeparttable}[b]
+		\fontsize{9}{11}\selectfont{
+		\begin{tabular}{|p{4cm}|p{3cm}|p{3cm}|} 
+			\hline
+			\textbf{ Corpus}                 & \textbf{ Macro F1} & \textbf{ \textit{Accuracy}} \\
+			\hline
+			Ensayos	argumentativos & 0,33			  & 0,57					\\ 
+			\hline
+			CDCP                   		 & 0,37			  & 0,63					\\ 
+			\hline
+			AbsTRCT               		 & 0,39			  & 0,61					\\ 
+			\hline
+		\end{tabular}
+	}
+	\end{threeparttable}
+\end{table}
+
+\begin{table}[!ht]
+	\centering
+	\caption{\fontsize{11}{12}\selectfont M\'etricas de predicci\'on de relaciones de las pruebas del predictor de enlace.}
+	\label{table:test_relation_metrics_link_predictor_link_prediction}
+	\begin{threeparttable}[b]
+		\fontsize{9}{11}\selectfont{
+		\begin{tabular}{|p{4cm}|p{3cm}|p{3cm}|} 
+			\hline
+			\textbf{ Corpus}                 & \textbf{ Macro F1}  & \textbf{ \textit{Accuracy}} \\
+			\hline
+			Ensayos argumentativos	& 0,68            & 0,75                   \\ 
+			\hline
+			CDCP                   		 & 0,79            & 0,68                   \\ 
+			\hline
+			AbsTRCT               		 & 0,83            & 0,74                   \\ 
+			\hline
+		\end{tabular}
+	}
+	\end{threeparttable}
+\end{table}
+
+En la Tabla \ref{table:test_relation_metrics_link_predictor_relation_classification} se observan
+valores m\'as discretos que en la Tabla \ref{table:test_relation_metrics_link_predictor_link_prediction}
+en ambas m\'etricas. Esta diferencia en la m\'etrica Macro F1 se interpreta como el fallo del modelo 
+en predecir correctamente la clase de la relaci\'on. En la tarea de predicci\'on de 
+enlace el modelo se desempe\~na mejor, aunque con diferencias entre los conjuntos de datos, 
+dando a entender que la estructura de las relaciones de estos pueden influir en el resultado.
+
+\subsection*{Evaluaci\'on cualitativa de la EA}
+
+Dado que las estructuras argumentativas var\'ian en su forma en cada corpus es complejo realizar un m\'etodo que eval\'ue de forma 
+justa los resultados obtenidos por los diferentes modelos de manera conjunta. Una variante ser\'ia anotar las cartas 
+con los esquemas argumentativos presentes en los conjuntos de datos, esto constituye una labor en la que se requiere
+personal experto, previo estudio y preparaci\'on, adem\'as de tiempo. 
+
+Por ello, el proceso que se llev\'o a cabo en esta investigaci\'on para realizar la 
+validaci\'on consisti\'o en un an\'alisis cualitativo realizado a criterio del autor. Para esto se seleccionaron 15 pares 
+de cartas, la carta original y la respuesta enviada a esta. Cada una de estas 30 cartas fueron anotadas por los modelos entrenados en cada 
+conjunto de datos y se realiz\'o una evaluaci\'on que consider\'o si la UDA se extrajo y clasific\'o correctamente, 
+as\'i como si la relaci\'on tambi\'en fue extra\'ida y clasificada por el modelo de manera adecuada.
+
+\subsubsection*{An\'alisis del corpus Ensayos Argumentativos}
+
+Los ensayos argumentativos presentan una anotaci\'on de UDAs a un nivel de unidades de texto que pueden ser 
+m\'as peque\~nas que oraciones y clasifican estas en las clases \textit{MajorClaim} (MC), \textit{Claim} (C) y \textit{Premise}
+(P). Las relaciones se clasifican en de \textit{supports} y \textit{attacks}. 
+
+En general, se observan problemas en la segmentaci\'on de UDAs debido al formato y dominio del texto.
+Las cartas presentan una estrutura donde al final se realiza una firma poniendo informaci\'on acerca del remitente.
+Esta estructura no contribuye a la argumentaci\'on, pero el modelo en varias ocasiones detecta componentes en estas. 
+Otro problema se observa en la extracci\'on de supuestas UDAs sin componente argumentativo,
+generalmente, estos elementos, si se expanden, pueden lograr establecer una mejor UDA.
+
+Ejemplos donde el modelo propuesto no fue exitoso:
+\begin{itemize}
+	\item \text{} [en cada uno de los establecimientos de nuestra Cadena de Tiendas]$_{MC}$
+	      : incompleto, mejora incorporando elementos de la izquierda (No a todos los productos con pr\'oxima fecha de vencimiento se le aplica rebaja de precios). % 2018-12-07_responde-trd-caribe-al-consumidor_a-proposito-de-la-proteccion-al-consumidor.txt.conll.link.conll.ann
+	\item \text{} [Esperamos lo antes posible una soluci\'on]$_{P}$
+	      : en contexto, no contiene informaci\'on que lo haga premisa. % 2018-10-05_abasto-de-agua-en-manzanillo.txt.conll.link.conll.ann
+\end{itemize}
+
+Ejemplos donde el modelo fue exitoso:
+\begin{itemize}
+	\item pudiese [contribuir al ahorro de agua y la prestaci\'on de un mejor servicio]$_C$ % 2018-10-05_abasto-de-agua-en-manzanillo.txt.conll.link.conll.ann
+	\item \text{} [es que estamos limitados de este servicio, y no desde hace un tiempo, es que nunca lo hemos tenido]$_P$ % 2018-05-18_sin-cobertura-en-guara-mayabeque.txt.conll.link.conll.ann
+\end{itemize}
+
+Las relaciones anotadas por el modelo tienden a contener falsos positivos, adem\'as
+dado que este conjunto de datos posee un gran desbalance en las etiquetas de las relaciones favoreciendo 
+estas a las de \textit{supports}, el modelo no fue capaz de realizar anotaciones de \textit{attacks}, tanto en 
+el conjunto de pruebas como en las ``Cartas a la Direcci\'on'' del \textit{Granma}.
+
+\subsubsection*{An\'alisis de CDCP}
+
+El corpus CDCP las UDAs son segmentadas, en la mayor\'ia de los casos, en oraciones 
+(solamente el 1\% de los \textit{tokens} se encuentran fuera de una UDA),
+estas son clasificadas en \textit{testimony} (T), \textit{fact} (F), \textit{policy} (P), \textit{reference} (R)
+y \textit{value} (V). Las relaciones presentan dos tipos de relaciones \textit{evidences} y \textit{reasons}.
+
+Los errores m\'as comunes cometidos por el modelo propuesto en la segmentaci\'on, provienen del uso 
+de signos de puntuaci\'on que no representan un cambio de oraci\'on, en estos casos se separan las UDAs. Tambi\'en
+existen errores de clasificaci\'on incorrecta, de, por ejemplo, \textit{testimony} que podr\'ian ser \textit{fact}.
+
+Ejemplos deonde el modelo propuesto no fue exitoso:
+\begin{itemize}
+	\item \text{} [Junto a la misiva se le entreg\'o al Inass certificados de salarios devengados y las tarjetas sn2-25.]$_T$
+	      : se clasifica mejor como \textit{fact}. % 2019-03-22_inconformidad-con-la-chequera.txt.conll.link.conll.ann
+	\item \text{} [Caridad Real Guti\'errez, Jefe de Tr\'amites y Pensiones, Inass.]$_T$
+	      : firma de la carta como elemento argumentaivo. % 2019-05-24_le-retribuyen-la-diferencia-reclamada-de-su-pension_inconformidad-con-la-chequera.txt.conll.link.conll.ann
+\end{itemize}
+
+Ejemplos donde el modelo propuesto fue exitoso:
+\begin{itemize}
+	\item \text{} [Mi jubilaci\'on comenz\'o el 29 de febrero de 2016, no el 29 de febrero de 2017.]$_T$ % 2019-03-22_inconformidad-con-la-chequera.txt.conll.link.conll.ann
+	\item \text{} [No se sabe cu\'anto queda, lo que obliga al cliente a estar haciendo cuentas constantemente.]$_F$ % 2021-05-07_servicentros-operan-diversos-medios-de-pago-electronicos_inconvenientes-con-tarjetas-de-combustible-en-moneda-nacional.txt.conll.link.conll.ann
+\end{itemize}
+
+La cantidad de relaciones anotadas por el modelo entrenado en este corpus
+disminuye en comparaci\'on a las anotadas por el modelo entrenado con el corpus Ensayos
+Argumentativos. Las relaciones \textit{reasons} son las m\'as encontradas. % TODO Poner numeros de esto
+
+\subsubsection*{An\'alisis del corpus AbsTRCT}
+
+El conjunto de datos presenta un estilo de segmentaci\'on de UDAs en donde se anotan 
+secciones de textos m\'as grandes que en el corpus Ensayos Argumentativos, aunque no necesariamente 
+todas las oraciones o la oraci\'on completa es considerada argumentativa. 
+Estas se clasifican igual que el corpus Ensayos Argumentativos, aunque 
+en este conjunto de datos se presenta un desbalance de etiquetas grande, favoreciendo 
+a las \textit{Premise} y las \textit{Claim}, % TODO Poner porcientos
+dejando sin representaci\'on casi a \textit{MajorClaim}
+(menor del 1\% de las etiquetas BIOES), lo que trajo como consecuencia que el modelo no fuera 
+capaz de diferenciar este tipo de UDA. Las relaciones se presentaron como \textit{partial-attack},
+\textit{attack} y \textit{support}, influenciadas tambi\'en por la poca cantidad de relaciones de \textit{attack}.
+
+En la clasificaci\'on de UDAs se evidencia una gran cantidad de \textit{Premise}.
+
+Ejemplos deonde el modelo propuesto no fue exitoso:
+\begin{itemize}
+	\item \text{} [, Director Divisi\'on Grandes Centros TRD Caribe.]$_C$
+	      : mala clasificaci\'on con mala segmentaci\'on y detecci\'on de \textit{claim} en pie de firma de la carta. 
+\end{itemize}
+
+Ejemplos donde el modelo propuesto fue exitoso:
+\begin{itemize}
+	\item \text{} [Esta respuesta considera sin raz\'on la preocupaci\'on de un lector,
+		      ¿as\'i debe terminar la inquietud de un ciudadano, que conf\'ia en las instituciones con que cuenta la 
+		      sociedad para enfrentar sus problemas?]$_C$ % 2017-05-12_cimex-se-dirige-a-limitado-fisico-motor_llamado-a-evaluar-situacion-de-piezas-y-baterias-para-equipos-motorizados-de-discapacitados.txt.conll.link.conll.ann
+\end{itemize}
+
+La cantidad de relaciones anotadas por el modelo entrenado en este corpus es la menor
+de los dem\'as conjuntos de datos. Se observa una gran cantidad de relaciones \textit{support}. % TODO Poner numeros de esto
+Las relaciones clasificadas como \textit{partial-attack}, a consideraci\'on del autor, presentaron 
+una baja precisi\'on.
+
+\subsection*{Discusi\'on}
+
+Las comparaciones con el estado del arte se realizan por cada conjunto de datos y se muestran las 
+m\'etricas indicadas por los autores de cada propuesta. Cada corpus y propuesta 
+presenta caracter\'isticas \'unicas que hacen que dif\'icil la comparaci\'on. 
+
+Una de las principales dificultades est\'a dada por el hecho de que las m\'etricas calculadas son de la versi\'on proyectada
+al espa\~nol, lo cual contribuye a variaciones en las etiquetas finales debido al lenguaje mismo 
+o a errores en el proceso. Otros ejemplos en la dificultad de comparar las m\'etricas se encuentra
+en los enfoques tomados por las investigaciones anteriores a la hora de realizar las tareas.
+En algunos casos la segmentaci\'on se presenta como una tarea de clasificaci\'on BIO, o
+se separan por oraciones y las clasifican en argumentativas o no.
+
+En el aspecto de clasificaci\'on
+de las UDAs se emplean m\'etodos como su clasificaci\'on independiente luego de ser extra\'ida o su modelaci\'on
+conjunta con la segmentaci\'on. En la extracci\'on y clasificaci\'on de relaciones se observan t\'ecnicas de 
+optimizaci\'on de problemas enteros, clasificaci\'on por SVM o tambi\'en probando los posibles enlaces dos 
+a dos independientemente.
+
+En la comparaci\'on de m\'etodos se seleccionaron seis m\'etricas que eval\'uan las diferentes 
+tareas de la EA. La m\'etrica BIOES F1 se refiere 
+a la Macro F1 de la clasificaci\'on de las etiquetas BIOES, esta constituye una medida
+que califica la tarea de segmentaci\'on de UDAs en el texto. 
+
+La m\'etrica Clas UDA F1 es 
+calculada como la Macro F1 de las etiquetas BIOES junto con las etiquetas del tipo de 
+UDA, medida que eval\'ua la tarea de clasificaci\'on de las UDAs. 
+
+Rel Pred F1 es la medida 
+Macro F1 de la predicci\'on de enlaces y Rel Clas F1 la de la clasificaci\'on, estas 
+son calculadas tomando en cuenta todos los pares seleccionados para el conjunto de 
+datos. 
+
+En las Tablas \ref{table:comparative_test_essays_f1_metrics_segmenter}-\ref{table:comparative_test_abstrct_f1_metrics_segmenter} el s\'imbolo $\checkmark$ significa 
+que los algoritmos son directamente comparables, el s\'imbolo
+$*$ expresa que el m\'etodo de comparaci\'on es el mismo, pero no son usados los mismos 
+elementos para calcular la m\'etrica, y el s\'imbolo $\times$ denota que la m\'etrica no 
+se comput\'o en las investigaciones donde se propusieron los modelos.
+
+
+\begin{table}[!ht]
+	\centering
+	\caption{\fontsize{11}{12}\selectfont M\'etricas comparativas del corpus Ensayos Persuasivos.}
+	\label{table:comparative_test_essays_f1_metrics_segmenter}
+	\begin{threeparttable}[b]
+		\fontsize{9}{11}\selectfont{
+		\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|} 
+			\hline
+			\textbf{ Modelo}      				& \textbf{ BIOES} 			 & \textbf{ Clas} 	& \textbf{ Rel} 	& \textbf{ Rel} 	\\ 
+												& \textbf{ F1} 				 & \textbf{ UDA F1} & \textbf{ Pred F1} & \textbf{ Clas F1} \\ 
+			\hline
+			Propuesto    					& 0,82     				 & 0,56      	& 0,68          & 0,33              \\
+			\hline
+			\citep{stab2017parsing} 		& 0,85  $\checkmark$     & 0,82      	& 0,58          & 0,70              \\
+			\hline
+			\citep{niculae2017argument}  & $\times$   			 & 0,77      	& 0,60          & $\times$          \\
+			\hline
+			\citep{galassi2021deep}      & $\times$  			 & 0,53      	& 0,36 *        & 0,18 *            \\ 
+			\hline
+		\end{tabular}
+	}
+	\end{threeparttable}
+\end{table}
+
+\begin{table}[!ht]
+	\centering
+	\caption{\fontsize{11}{12}\selectfont M\'etricas comparativas del corpus CDCP.}
+	\label{table:comparative_test_cdcp_f1_metrics_segmenter}
+	\begin{threeparttable}[b]
+		\fontsize{9}{11}\selectfont{
+		\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|} 
+			\hline
+			\textbf{ Modelo}      				& \textbf{ BIOES} 			 & \textbf{ Clas} 	& \textbf{ Rel} 	& \textbf{ Rel} 	\\ 
+												& \textbf{ F1} 				 & \textbf{ UDA F1} & \textbf{ Pred F1} & \textbf{ Clas F1} \\ 
+			\hline
+			Propuesto    				& 0,56      	 & 0,45         	 & 0,68 			 & 0,37               \\
+			\hline
+			\cite{niculae2017argument}  & $\times$       & 0,73              & 0,27 			 &  $\times$          \\
+			\hline
+			\cite{galassi2021deep} 		& $\times$  	 & 0,79              & 0,30	*   		 &  0,15	*         \\
+			\hline
+		\end{tabular}
+	}
+	\end{threeparttable}
+\end{table}
+
+\begin{table}[!ht]
+	\centering
+	\caption{\fontsize{11}{12}\selectfont M\'etricas comparativas del corpus AbsTRCT.}
+	\label{table:comparative_test_abstrct_f1_metrics_segmenter}
+	\begin{threeparttable}[b]
+		\fontsize{9}{11}\selectfont{
+		\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|} 
+			\hline
+			\textbf{ Modelo}      				& \textbf{ BIOES} 			 & \textbf{ Clas} 	& \textbf{ Rel} 	& \textbf{ Rel} 	\\ 
+												& \textbf{ F1} 				 & \textbf{ UDA F1} & \textbf{ Pred F1} & \textbf{ Clas F1} \\ 
+			\hline
+			Propuesto    				& 0,79      	 & 0,50              & 0,74 			 & 0,39               \\
+			\hline
+			\cite{mayer2020transformer} & $\times$       & 0,88	$\checkmark$ & $\times$  		 & 0,66 *             \\
+			\hline
+			\cite{galassi2021deep} 		& $\times$  	 & 0,91 	         & 0,54 *            & 0,70 *    		  \\
+			\hline
+		\end{tabular}
+	}
+	\end{threeparttable}
+\end{table}
+
+Se considera que el corpus CDCP se ajusta mejor a las caracter\'isticas de las ``Cartas 
+a la Direcci\'on''. Este presenta or\'igenes similares y un conjunto de etiquetas de UDAs que se ajustan m\'as a lo observado 
+en las Cartas. Tambi\'en las Cartas presentan un alto contenido argumentativo, por lo que marcar 
+todas las oraciones como argumentativas no constituye una fuente grande de errores.
+
+Una desventaja de este esquema sobre otros es la carencia de una 
+clasificaci\'on de las relaciones que implique un ataque, aunque esto se cubre con el hecho de 
+que en los conjuntos en donde existen estas, los resultados son pobres en ese aspecto. La cantidad 
+y calidad de relaciones, aunque tiene espacio para mejorar, es aceptable dada la dificultad 
+del problema en EA.
+
+La ventaja del modelo entrenado con el corpus de Ensayos Argumentativos en la extracci\'on 
+y clasificaci\'on de UDA es que utiliza un conjunto de etiquetas que 
+podr\'ia considerarse universal en la argumentaci\'on y adem\'as reduce el espacio de b\'usqueda de 
+oraciones a segmentos de palabras, aunque estos puedan estar sujetos a errores. 
+
+La versi\'on del modelo propuesto entrenado sobre el corpus AbsTRCT constituye el modelo 
+con menor rendimiento. La clasificaci\'on
+de UDAs present\'o una gran desproporci\'on hacia \textit{Premise} dejando muchas \textit{Claim} % TODO Poner numeros
+sin ser correctamente clasificadas. Sobre las relaciones, report\'o un nivel muy bajo de 
+relaciones por documento, respecto a las que se podr\'ian formar.
+
+\section*{Conclusiones}
+
+% Los p\'arrafos se escribir\'an en Times New Roman a 12 puntos y con espaciado 1,5 y una l\'inea en blanco como 
+% separador.
+
+% \textit{Las conclusiones se derivan del trabajo realizado. No son una repetici�n de incluido en el Resumen. 
+% Toda conclusi�n debe estar fundamentada en lo expuesto y discutido en el trabajo y debe reflejar el cumplimiento 
+% de los objetivos. Deben indicar c�mo el trabajo contribuye o es un avance en el campo y objeto de estudio. 
+% Adem�s, deben sugerir usos y trabajos futuros.}
+
+En la investigaci\'on se logr\'o la extracci\'on de estructuras argumentativas en los textos de las 
+``Cartas a la Direcci\'on'' del peri\'odico \textit{Granma}. Para esto se hizo un an\'alisis de los
+modelos entrenado con los distintos conjuntos de datos y se seleccion\'o el modelo que m\'as se ajustaba
+al dominio de las cartas. Esta
+selecci\'on se realiz\'o sin tener un conjunto anotado por ling\"uistas de las Cartas,
+por lo que los autores fueron los que establecieron los criterios cualitativos 
+para la selecci\'on del modelo final.
+
+En los resultados obtenidos en las tareas de segmentaci\'on y clasificaci\'on de UDAs se observan
+valores 50\%F1 entre 0,82 y 0,94 y 0,68 y 0,83, respectivamente, indicando una segmentaci\'on aceptable 
+pero que en ocasiones falla a la hora de clasificar correctamente. Al predecir los enlaces y clasificarlos 
+los modelos obtienen resultados de Macro F1 entre 0,68 y 0,83 y 0,33 y 0,39, respectivamente. Estos evidencian
+una mayor dificultad a la hora de trabajar con las relaciones, sobre todo al clasificarlas. 
+Las comparaciones con las investigaciones previas con los resultados de los modelos entrenados 
+se vieron dificultadas por los diferentes enfoques presentados en estas a la hora de seleccionar 
+c\'omo modelar el problema y c\'omo procesar los datos para entrenar los modelos.
+
+Este trabajo aport\'o nuevos conjuntos de datos, estos son las ``Cartas a la Direcci\'on'' extra\'idas del \textit{Granma},
+los corpus proyectados al espa\~nol de Ensayos Argumentativos, AbsTRCT y CDCP y las Cartas 
+anotadas con las estructuras argumentativas del modelo entrenado con el conjunto de datos CDCP. Tambi\'en
+present\'o unos modelos capaces de adaptarse a los diferentes esquemas que se puedan presentar en la argumentaci\'on,
+haci\'endolos viables para un estudio directo y sin el agrego de conocimiento espec\'ifico de los datos.
+
+El software implementado y los datos pueden encontrarse en \url{https://github.com/luisoibarra/argument-mining}.
+
+\section*{\fontsize{12}{15}\selectfont Agradecimientos}
+
+Los autores agradecen el apoyo del Proyecto de Investigaci\'on 
+``Din\'amicas sociales, pol\'iticas y econ\'omicas en el discurso p\'ublico 
+en Cuba de principio del siglo XXI: estudios de CORESPUC'', 
+asociado al Programa Nacional de Ciencia y T\'ecnica ``Las Ciencias Sociales y las Humanidades. 
+Desaf\'ios ante la estrategia de desarrollo de la sociedad cubana'', C\'odigo PN223LH011-011, Ministerio
+de Ciencia, Tecnolog\'ia y Medio Ambiente (CITMA), Cuba, 2021-2023.
+
+% \section*{Referencias}
+
+% En las referencias solo se incluyen los trabajos citados expl�citamente en el texto. Evite el uso de fuentes 
+% no confiables. Toda la bibliograf�a usada debe estar acotada en el cuerpo del documento siguiendo las pautas 
+% de las normas ISO 690 de la forma (Apellido, a�o). Ejemplos: forma simple \citep{Smith:2012qr} o m�ltiple 
+% \citep{Smith:2012qr,Smith:2013jd}.
+
+\bibliographystyle{plainnat}
+\bibliography{rcci_template}
+
+\begin{center}
+	\textbf{Conflicto de inter\'es}
+\end{center}
+El autor autoriza la distribuci\'on y uso de su art\'iculo. (12 Ptos. Just.)
+
+\begin{center}
+	\textbf{Contribuciones de los autores} 
+\end{center}
+\begin{enumerate}
+	\item Conceptualizaci\'on: Nombre y Apellidos del autor.
+	\item Curaci\'on de datos: Nombre y Apellidos del autor
+	\item An\'alisis formal: Nombre y Apellidos del autor 
+	\item Adquisici\'on de fondos: Nombre y Apellidos del autor
+	\item Investigaci\'on: Nombre y Apellidos del autor 
+	\item Metodolog\'ia: Nombre y Apellidos del autor
+	\item Administraci\'on del proyecto: Nombre y Apellidos del autor
+	\item Recursos: Nombre y Apellidos del autor
+	\item Software: Nombre y Apellidos del autor 
+	\item Supervisi\'on: Nombre y Apellidos del autor
+	\item Validaci\'on: Nombre y Apellidos del autor
+	\item Visualizaci\'on: Nombre y Apellidos del autor
+	\item Redacci\'on - borrador original: Nombre y Apellidos del autor
+	\item Redacci\'on - revisi�n y edici�n: Nombre y Apellidos del autor
+\end{enumerate}
+
+OBSERVACIÓN:
+Cada rol se define de la siguiente forma:
+\begin{itemize}
+	\item Conceptualizaci�n - Ideas; formulaci�n o evoluci�n de los objetivos y metas generales de la investigaci�n.
+	\item Curaci�n de datos - Actividades de gesti�n para anotar (producir metadatos), depurar datos y mantener los datos de la investigaci�n (incluido el c�digo de software, cuando sea necesario para interpretar los propios datos) para su uso inicial y su posterior reutilizaci�n.
+	\item An�lisis formal - Aplicaci�n de t�cnicas estad�sticas, matem�ticas, computacionales u otras t�cnicas formales para analizar o sintetizar datos de estudio.
+	\item Adquisici�n de fondos - Adquisici�n del apoyo financiero para el proyecto que conduce a esta publicaci�n.
+	\item Investigaci�n - Realizaci�n de una investigaci�n y proceso de investigaci�n, realizando espec�ficamente los experimentos, o la recolecci�n de datos/evidencia.
+	\item Metodolog�a - Desarrollo o dise�o de la metodolog�a; creaci�n de modelos.
+	\item Administraci�n del proyecto - Responsabilidad de gesti�n y coordinaci�n de la planificaci�n y ejecuci�n de la actividad de investigaci�n.
+	\item Recursos - Suministro de materiales de estudio, reactivos, materiales, pacientes, muestras de laboratorio, animales, instrumentaci�n, recursos inform�ticos u otras herramientas de an�lisis.
+	\item Software - Programaci�n, desarrollo de software; dise�o de programas inform�ticos; implementaci�n del c�digo inform�tico y de los algoritmos de apoyo; prueba de los componentes de c�digo existentes.
+	\item Supervisi�n - Responsabilidad de supervisi�n y liderazgo en la planificaci�n y ejecuci�n de actividades de investigaci�n, incluyendo la tutor�a externa al equipo central.
+	\item Validaci�n - Verificaci�n, ya sea como parte de la actividad o por separado, de la replicabilidad/reproducci�n general de los resultados/experimentos y otros productos de la investigaci�n.
+	\item Visualizaci�n - Preparaci�n, creaci�n y/o presentaci�n del trabajo publicado, espec�ficamente la visualizaci�n/presentaci�n de datos.
+	\item Redacci�n - borrador original - Preparaci�n, creaci�n y/o presentaci�n del trabajo publicado, espec�ficamente la redacci�n del borrador inicial (incluyendo la traducci�n sustantiva).
+	\item Redacci�n - revisi�n y edici�n - Preparaci�n, creaci�n y/o presentaci�n del trabajo publicado por los miembros del grupo de investigaci�n original, espec�ficamente revisi�n cr�tica, comentario o revisi�n - incluyendo las etapas previas o posteriores a la publicaci�n.
+\end{itemize}
+
+\begin{center}
+	\textbf{Financiaci\'on} 
+\end{center}
+Qui\'en financia la investigaci\'on. (12 Ptos. Just.)
+
+\fontsize{10}{10}\selectfont{\theendnotes}
+
+\par\noindent\rule{\textwidth}{0.5pt}
+
+Observaciones:
+-	No puede haber quiebras en los t\'itulos.
+-	Las tablas complejas o con celdas combinadas deben ser trabajadas como im\'agenes.
+
+\end{document}

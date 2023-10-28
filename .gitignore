@@ -19,11 +19,12 @@
 *.gz
 *.fdb_latexmk
 *.fls
-*.py
+# *.py
 *.bcf
 *.xml
 *.pdf_tex
 *.nav
 *.snm
+*.ent
 presentation/IDEAS.md
 TODO.md
