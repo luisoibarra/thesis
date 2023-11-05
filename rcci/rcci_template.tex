@@ -5,6 +5,7 @@
 \usepackage{amsbsy}
 \usepackage{svg}
 \usepackage{url}
+\usepackage{changepage}
 
 \setcounter{page}{1}
 
@@ -48,10 +49,10 @@ La Extracci\'on de Argumentos se realiza tradicionalmente mediante anotaci\'on
 manual de expertos en ling\"u\'istica, lo que demora mucho tiempo. 
 Este art\'iculo propone aplicar algoritmos de aprendizaje profundo 
 al campo de la Extracci\'on de Argumentos en textos de la prensa cubana, constituyendo el 
-primero de su tipo publicado  y adaptado para textos del espa\~nol de Cuba, hasta donde los autores conocen.
+primero de su tipo publicado, hasta donde los autores conocen.
 Para ello, 1) se crean conjuntos de datos a partir de provenientes del idioma ingl\'es,
 2) se proponen y entrenan los modelos y 3) se anotan
-autom\'aticamente las unidades de discurso argumentativas (UDA). Los atributos
+autom\'aticamente las estructuras argumentativas. Los atributos
 utilizados para la representaciones de los textos son aprendidos en el proceso de entrenamiento 
 para ajustarse al criterio argumentativo de los datos.
 De los conjuntos de datos disponibles, se realiz\'o un an\'alisis de las ventajas y 
@@ -67,9 +68,9 @@ de enlaces y 0,39 en la clasificaci\'on de enlaces.
 \vskip 2em
 \englishabstract{\vskip 0.5em \normalfont{Argument Extraction is traditionally performed by manual annotation by linguistic experts, which takes lots of time. 
 This paper proposes deep learning algorithms to perform the Argument Extraction in 
-Cuban press texts, constituting the first of its kind published and adapted for Cuban Spanish texts, as far as the authors 
+Cuban press texts, constituting the first of its kind published for Cuban Spanish texts, as far as the authors 
 knowledge. To this end, 1) datasets are created by annotation projection from other ones in English language, 2) models are proposed and trained, 
-and 3) automatic annotation of Argumentative Discourse Units (ADUs) is performed. The features used for text representations
+and 3) automatic annotation of the argumentative structures is performed. The features used for text representations
 are learned in the training process to match the argumentative criteria of the data. From the available data sets, an analysis 
 of the advantages and deficiencies of each one was made for the annotation of the ``Letters to the Editor'' of the Cuban newspaper
 \textit{Granma}. 
@@ -102,13 +103,13 @@ were 0.56 in ADU classification, 0.74 in link prediction and 0.39 in link classi
 La argumentaci\'on es una actividad verbal, social y racional destinada a convencer 
 a un cr\'itico razonable de la aceptabilidad de un punto de vista mediante la presentaci\'on 
 de proposiciones que justifican o refutan la proposici\'on expresada 
-en el punto de vista \cite{van2004systematic}.
+en el punto de vista \citep{van2004systematic}.
 
 Varias tareas en el Procesamiento de Lenguaje Natural (PLN) se han desarrollado alrededor
 de diferentes problemas relacionados con 
 la argumentaci\'on. Entre estas se encuentran: el minado de opiniones, sentimientos y 
 emociones expresadas en un texto 
-\cite{liu2010sentiment}, la detecci\'on de controversias, y la zonificaci\'on
+\citep{liu2010sentiment}, la detecci\'on de controversias, y la zonificaci\'on
 argumentativa. 
 
 Es necesario realizar un 
@@ -116,11 +117,11 @@ an\'alisis de los argumentos dados, para transformar el texto no estructurado a 
 que permitan el entendimiento de los puntos de vista y de c\'omo se ``apoyan'' o ``atacan'' entre s\'i. Este an\'alisis
 es posible realizarlo manualmente o utilizando programas
 especializados para la anotaci\'on, aunque la pr\'actica ha demostrado que este proceso requiere 
-de una gran cantidad de tiempo y de personal calificado \cite{eger2018cross}. 
+de una gran cantidad de tiempo y de personal calificado \citep{eger2018cross}. 
 
 La Extracci\'on de Argumentos (EA) es la rama del PLN encargada
 del estudio de m\'etodos para la extracci\'on autom\'atica de las estructuras argumentativas de 
-los textos y su posterior procesamiento \cite{lawrence2020argument}. Esta tarea se divide en 
+los textos y su posterior procesamiento \citep{lawrence2020argument}. Esta tarea se divide en 
 cuatro subtareas fundamentales: i) la extracci\'on y ii) clasificaci\'on de las componentes 
 argumentativas del texto, y iii) la extracci\'on y 
 iv) clasificaci\'on de las relaciones entre estas. 
@@ -128,15 +129,15 @@ iv) clasificaci\'on de las relaciones entre estas.
 La EA se caracteriza por la poca disponibilidad de datos anotados y 
 por la heterogeneidad de las 
 anotaciones. Adem\'as, la gran mayor\'ia de los estudios realizados en el campo se encuentran en 
-idiomas como el ingl\'es, alem\'an o chino \cite{eger2018cross}. 
-En espa\~nol, se reportan pocas investigaciones del an\'alisis de los argumentos \cite{esteve2020mineria} y, en 
+idiomas como el ingl\'es, alem\'an o chino \citep{eger2018cross}. 
+En espa\~nol, se reportan pocas investigaciones del an\'alisis de los argumentos \citep{esteve2020mineria} y, en 
 Cuba, no se encontr\'o ninguna referencia, seg\'un la b\'usqueda de literatura cient\'ifica
 realizada por los autores.
 
 El objetivo, de esta investigaci\'on es proponer un algoritmo basado en aprendizaje profundo 
 para la extracci\'on y an\'alisis de estructuras argumentativas en textos 
 de la prensa cubana (en particular, la secci\'on ``Cartas a la Direcci\'on'' del per\'iodico \textit{Granma}), 
-constituyendo el primero de su tipo publicado y adaptado para
+constituyendo el primero de su tipo publicado para
 textos del espa\~nol de Cuba, hasta donde los autores conocen. 
 Para lograr dicho objetivo, en primer lugar, es necesario obtener mediante \textit{crawling} los textos a analizar del sitio 
 web del peri\'odico \textit{Granma}. Luego, se proponen algoritmos de aprendizaje autom\'atico capaces de realizar las tareas 
@@ -149,8 +150,8 @@ de las componentes argumentativas mediante la clasificaci\'on de los \textit{tok
 delimitan y clasifican las unidades de discurso argumentativas (UDA). En el segundo, se analizan 
 las posibles relaciones entre UDAs de manera independiente para saber si est\'an relacionadas o no y
 el tipo de relaci\'on existente. Los modelos utilizan 
-redes neuronales convolucionales (CNN, en ingl\'es), \textit{Long Short Term Memory} (LSTM, en ingl\'es) \cite{hochreiter1997long} y \textit{Conditional Random Field} (CRF, en ingl\'es) \cite{lafferty2001conditional}
-como elementos principales en sus arquitecturas, adem\'as se emplean vectores GloVe \cite{pennington2014glove} para la representaci\'on
+redes neuronales convolucionales (CNN, en ingl\'es), \textit{Long Short Term Memory} (LSTM, en ingl\'es) \citep{hochreiter1997long} y \textit{Conditional Random Field} (CRF, en ingl\'es) \citep{lafferty2001conditional}
+como elementos principales en sus arquitecturas, adem\'as se emplean vectores GloVe \citep{pennington2014glove} para la representaci\'on
 de las palabras. 
 
 El art\'iculo se divide en varias secciones. Primero, se presentan las definiciones 
@@ -175,13 +176,13 @@ recomendaciones de la investigaci\'on.
 
 La EA consiste en la identificaci\'on y extracci\'on 
 autom\'atica de las estructuras de inferencia y 
-razonamiento expresadas como argumentos presentes en el lenguaje natural \cite{lawrence2020argument}.
+razonamiento expresadas como argumentos presentes en el lenguaje natural \citep{lawrence2020argument}.
 La EA permite dar respuesta a este problema presentando
 los argumentos y c\'omo sus relaciones justifican las posiciones del hablante. Dicho problema est\'a constituido por diferentes 
 estructuras y se compone de distintas tareas necesarias para su soluci\'on.
 
 Existen diferentes estudios que conforman una metodolog\'ia de an\'alisis para
-identificar los argumentos. El modelo de Toulmin \cite{toulmin_2003} introduce categor\'ias 
+identificar los argumentos. El modelo de Toulmin \citep{toulmin_2003} introduce categor\'ias 
 con distintas funciones dentro de la argumentaci\'on. En 
 el idioma espa\~nol existen rasgos ling\"u\'isticos que, adem\'as de dar indicaci\'on de la existencia de argumentos, 
 dan pie para conocer las relaciones entre estos y los tipos de argumentos. \citep{venegas2005hacia}
@@ -194,12 +195,23 @@ Las estructuras argumentativas son las partes de la argumentaci\'on de los texto
 Estas se componen de dos elementos principales: las Unidades de Discurso Argumentativas (UDAs) y los enlaces
 o relaciones existentes entre estas. Las UDAs corresponden a la unidad m\'inima de argumentaci\'on, definida 
 como un segmento de texto que juega un solo rol para el argumento analizado, y es 
-delimitado por segmentos vecinos que tienen roles diferentes o ning\'un rol \cite{stede2018argumentation}.
+delimitado por segmentos vecinos que tienen roles diferentes o ning\'un rol \citep{stede2018argumentation}.
 
 Las UDAs se relacionan entre s\'i conformando el proceso de inferencia y razonamiento del argumento.
-Tanto los enlaces como las UDAs son clasificados en dependencia de su rol en la argumentaci\'on. Estas clasificaciones 
-parten de los conceptos de afirmaci\'on, declaraci\'on controversial y parte central del argumento, y premisa, % TODO Poner referencias a los conceptos, o eliminarlos
-razones que la justifican o refutan, y en las relaciones de ataque y apoyo. 
+Tanto los enlaces como las UDAs son clasificados en dependencia de su rol en la argumentaci\'on. Las clasificaciones de UDAs 
+parten de los conceptos de afirmaci\'on (declaraci\'on controversial o parte central del argumento) y premisa
+(razones que justifican o refutan afrimaciones). Las clasificaciones de las relaciones entre UDAs parten de los conceptos 
+de ataque (la UDA fuente refuta o cuestiona lo enunciado por la UDA destino) y apoyo 
+(la UDA fuente aserta o complementa lo enunciado por la UDA destino).
+
+En el ejemplo \footnote{Extraído de \textcite{toulminArgument}.} siguiente se presenta una oración en donde 
+se evidencia la relación de apoyo entre el fundamento inicial y la afirmación final.:
+
+\begin{adjustwidth}{25pt}{25pt}
+    [\emph{Se escucharon ladridos y aullidos en la distancia}]$_{\mathrm{fundamento}}$, 
+    probablemente
+    [\emph{haya perros en las cercanías}]$_{\mathrm{afirmacion}}$.
+\end{adjustwidth}
 
 \subsubsection*{Tareas de extracci\'on de argumentos}
 
@@ -213,24 +225,35 @@ se conciben las siguientes tareas principales:
 	\item Clasificaci\'on de relaciones entre las UDAs: asignar una categor\'ia a la relaci\'on extra\'ida.
 \end{enumerate}
 
+Ejemplo del resultado final de la tarea de extracci\'on de argumentos sobre un texto, delimitadas entre corchetes
+se encuentran las UDAs, clasificadas en afirmación y premisa respectivamente, además de la relación que existe entre 
+estas (la segunda apoya la primera):
+
+\begin{adjustwidth}{25pt}{25pt}
+    En primer lugar, [\emph{el correo electr\'onico puede contar como uno de los resultados
+    m\'as beneficiosos de la tecnolog\'ia moderna}]$_{\mathrm{Afirmacion}}$. [\emph{A\~nos atr\'as, las personas pagaban gran cantidad de dinero para 
+    enviar sus cartas y sus pagos estaban sujetos al peso de sus cartas o paquetes y muchos accidentes podr\'ian 
+    causar problemas que causar\'ian que el correo no fuera enviado}]$_{\mathrm{Premisa, -1, apoyo}}$.
+\end{adjustwidth}
+
 \subsubsection*{Variantes para la Extracci\'on de Argumentos}
 
 Varias investigaciones han dado respuesta a los problemas asociados a EA, mostrando
-una variedad en enfoques y m\'etodos. Para la segmentaci\'on de las UDAs se ha separado
+una variedad en enfoques y m\'etodos. Para la segmentaci\'on de las UDs se ha separado
 en oraciones y luego clasificado cada una en si es UDA o no mediante algoritmos como 
-\textit{Naive Bayes} (NB) y m\'aquinas de soporte vectorial (SVM, en ingl\'es) \cite{palau2009argumentation,goudas2015argument}.
+\textit{Naive Bayes} (NB) y m\'aquinas de soporte vectorial (SVM, en ingl\'es) \citep{palau2009argumentation,goudas2015argument}.
 Otras aproximaciones para esta tarea consiste en la clasificaci\'on en etiquetas BIO
-de los \textit{tokens} del texto \cite{goudas2015argument,stab2017parsing,eger2017neural} y en el uso de
-reglas basadas en anotaciones ling\"u\'isticas \cite{dykes2020reconstructing}.
+de los \textit{tokens} del texto \citep{goudas2015argument,stab2017parsing,eger2017neural} y en el uso de
+reglas basadas en anotaciones ling\"u\'isticas \citep{dykes2020reconstructing}.
 
 En las tareas de predicci\'on y clasificaci\'on de enlaces se han empleado gram\'aticas libre de contexto 
-basadas en anotaciones de los \textit{tokens} \cite{palau2009argumentation}. SVM y aprendizaje profundo han sido utilizados para clasificar 
-las posibles relaciones dos a dos \cite{goudas2015argument,galassi2021deep}, en \citep{goudas2015argument}
+basadas en anotaciones de los \textit{tokens} \citep{palau2009argumentation}. SVM y aprendizaje profundo han sido utilizados para clasificar 
+las posibles relaciones dos a dos \citep{goudas2015argument,galassi2021deep}, en \citep{goudas2015argument}
 se optimiza la estructura final con un problema de optimizaci\'on lineal en enteros.
 
 Las UDAs y las relaciones han sido representadas de diferentes maneras, ya sea por 
-atributos escogidos a mano mediante conocimiento experto \cite{palau2009argumentation,goudas2015argument}, como
-por atributos aprendidos por los algoritmos en la fase de entrenamiento \cite{eger2017neural,galassi2021deep}.
+atributos escogidos a mano mediante conocimiento experto \citep{palau2009argumentation,goudas2015argument}, como
+por atributos aprendidos por los algoritmos en la fase de entrenamiento \citep{eger2017neural,galassi2021deep}.
 
 En los modelos propuestos (ver secciones \ref{ssec:segm_clsf_uda} y \ref{ssec:pred_clsf_enlaces}), gran parte de las representaciones son aprendidas en el proceso de 
 entrenamiento y las que se agregan de forma manual casi no influyen en la escalabilidad del sistema.
@@ -241,17 +264,33 @@ aunque se utiliza el modelado de problemas conjuntos para minimizarlo.
 
 La proyecci\'on de etiquetas es un algoritmo donde se 
 transfieren las etiquetas de un corpus anotado a nivel de \textit{tokens} en un lenguaje origen hacia su traducci\'on en un
-lenguaje objetivo. En \cite{eger2018cross} se propone un algoritmo de proyecci\'on a partir de las alineaciones de 
+lenguaje objetivo. Esta operación es realizada para obtener conjuntos de datos en el español a partir de otros 
+existentes en otros lenguajes. En \citep{eger2018cross} se propone un algoritmo de proyecci\'on a partir de las alineaciones de 
 palabras. El proceso se divide en varias partes:
 
 \begin{enumerate}
 	\item Traducci\'on autom\'atica de oraciones: proceso de
 	traducir autom\'aticamente texto de un lenguaje fuente a un lenguaje objetivo.
+	\begin{adjustwidth}{25pt}{25pt}
+		Firstly , people normally have lots of things to do . \\
+		En primer lugar , la gente normalmente tiene muchas cosas que hacer .
+	\end{adjustwidth}
 	\item Alineaci\'on de palabras: consiste en asignar las palabras del lenguaje fuente
-	a sus equivalentes generadas en el lenguaje objetivo.
+	a sus equivalentes generadas en el lenguaje objetivo. Los índices en los \emph{tokens} del lenguaje objetivo representan 
+	los \emph{tokens} asociados del lenguaje fuente, por ejemplo, a \emph{Firstly} se le asocia la frase \emph{En primer lugar}.
+	\begin{adjustwidth}{25pt}{25pt}
+		Firstly$_0$ ,$_1$ people$_2$ normally$_3$ have$_4$ lots$_5$ of$_6$ things$_7$ to$_8$ do$_9$ .$_{10}$ \\
+		En$_0$ primer$_0$ lugar$_0$ ,$_1$ la$_2$ gente$_2$ normalmente$_3$ tiene$_4$ muchas$_5$ cosas$_7$ que$_8$ hacer$_9$ .$_{10}$
+	\end{adjustwidth}
 	\item Proyecci\'on de etiquetas: consiste en transformar las etiquetas de las palabras en la secuencia origen
 	hacia las palabras de la secuencia destino tomando como datos las alineaciones entre estas.
+	\begin{adjustwidth}{25pt}{25pt}
+		Firstly$_O$ ,$_O$ people$_B$ normally$_I$ have$_I$ lots$_I$ of$_I$ things$_I$ to$_I$ do$_I$ .$_O$ \\
+		En$_O$ primer$_O$ lugar$_O$ ,$_O$ la$_O$ gente$_B$ normalmente$_I$ tiene$_I$ muchas$_I$ cosas$_I$ que$_I$ hacer$_I$ .$_O$
+	\end{adjustwidth}
 \end{enumerate}
+
+
 
 \subsection*{Segmentaci\'on y clasificaci\'on de UDAs}
 
@@ -289,7 +328,7 @@ del \textit{token} correspondiente.
 
 Otro atributo usado en la representaci\'on de los \textit{tokens} constituyen las etiquetas de 
 partes de la oraci\'on de estos.
-El conjunto de etiquetas elegido es un conjunto universal \cite{petrov2011universal} aplicable a muchos idiomas.
+El conjunto de etiquetas elegido es un conjunto universal \citep{petrov2011universal} aplicable a muchos idiomas.
 Estas etiquetas se representan como un vector al que se le asigna 1 en la posici\'on correspondiente a la clase y 0 en 
 los otros elementos (codificaci\'on \textit{one-hot}) y este es transformado por una capa densa con $p=5$ neuronas
 y funci\'on de activaci\'on \textit{ReLU}. El resultado se concatena a la representaci\'on del \textit{token} correspondiente. Mediante 
@@ -359,7 +398,7 @@ exponencial y tasa de aprendizaje $lr=0.003$.
 
 Dado que se realiza un aprendizaje de varias tareas, se tienen varias funciones de p\'erdida individuales que conforman 
 la funci\'on de p\'erdida final $e$. Sea $e_r$ la funci\'on de p\'erdida de la clasificaci\'on de la relaci\'on, $e_s$ la del tipo de UDA origen  
-y $e_t$ del tipo de UDA objetivo, entonces $e = 10 \cdot e_r + e_s + e_t$ \cite{galassi2021deep}.
+y $e_t$ del tipo de UDA objetivo, entonces $e = 10 \cdot e_r + e_s + e_t$ \citep{galassi2021deep}.
 
 \subsubsection*{Preprocesamiento de predicci\'on y clasificaci\'on de enlaces}
 
@@ -387,21 +426,28 @@ originales se suman, y si superan el 50\%, se considera enlazado el par.
 
 \subsection*{Conjuntos de Datos}
 
-Para el entrenamiento de los modelos propuestos se utilizaron corpus diferentes, estos
-presentan esquemas de anotaci\'on distintos entre s\'i, difiriendo principalmente en la definici\'on de UDA y 
-las clasificaciones dadas a estas y a las relaciones.
-
 Todos los conjuntos de datos est\'an originalmente en ingl\'es, por lo tanto, se les aplic\'o el algoritmo de proyecci\'on
 de corpus para obtener uno en espa\~nol para ser usado en el entrenamiento de los modelos.
 
 Para la traducci\'on autom\'atica se utiliz\'o el servicio de Google Translate,
-obteniendo las alineaciones de palabras con AwesomeAlign \cite{dou2021word}.
+obteniendo las alineaciones de palabras con AwesomeAlign \citep{dou2021word}.
 Con estos datos se realiz\'o la proyecci\'on de etiquetas con el algoritmo propuesto 
 por \citep{eger2018cross}.
 
+En el entrenamiento de los modelos propuestos se utilizaron corpus diferentes, estos
+presentan esquemas de anotaci\'on distintos entre s\'i, difiriendo principalmente en la definici\'on de UDA y 
+las clasificaciones dadas a estas y a las relaciones. Se utilizan los conjuntos proyectados al español de 
+Ensayos Argumentativos, CDCP y AbsTRCT para el entrenamiento de los modelos. La selección del
+modelo fue realizada con el corpus de Ensayos Argumentativos, utilizando la mejor combinaci\'on de estos fue utilizada 
+para el entrenamiento de los corpus restantes. Este conjunto fue seleccionado dado que presenta un esquema argumentativo
+claro. Aunque este proceso es posible realizarlo con todos los conjuntos y seleccionar el mejor modelo en general, dada la 
+complejidad temporal, solo fue realizdo con este Ensayos Argumentativos.
+Para la validación de los modelos
+se utiliza Cartas a la Dirección, originalmente en español.
+
 \subsubsection*{Corpus Ensayos Argumentativos}\label{corpus:persuasive_essays}
 
-Este corpus \cite{stab2017parsing} presenta 402 documentos, divididos por los autores en 286 documentos para entrenamiento (70\%), 
+Este corpus \citep{stab2017parsing} presenta 402 documentos, divididos por los autores en 286 documentos para entrenamiento (70\%), 
 80 para prueba (20\%) y 36 para validaci\'on (10\%). El corpus contiene ensayos de estudiantes en los que 
 se argumentan sobre temas como cooperar o competir y sobre las contribuciones de la tecnolog\'ia a la sociedad.
 Las anotaciones de las UDAs se conforman por segmentos de textos argumentativos,
@@ -416,7 +462,7 @@ lo que result\'o en un n\'umero final de 715 (10 \%) de ataque y 5958 (90 \%) de
 
 \subsubsection*{CDCP}\label{corpus:cdcp}
 
-El corpus CDCP \cite{niculae2017argument} est\'a conformado por 731 comentarios de usuarios extra\'idos de la web sobre el tema de 
+El corpus CDCP \citep{niculae2017argument} est\'a conformado por 731 comentarios de usuarios extra\'idos de la web sobre el tema de 
 pr\'acticas de cobro de deudas a los consumidores.
 Las UDAs se encuentran segmentadas en oraciones y todas se consideran argumentativas.
 Est\'an clasificadas en 
@@ -426,7 +472,7 @@ Las relaciones se encuentran clasificadas en \textit{reason} con 1352 (95\%) y \
 
 \subsubsection*{AbsTRCT}
 
-El corpus AbsTRCT \cite{mayer2020transformer} se compone de 500 documentos sobre el estudio de cuatro enfermedades diferentes:
+El corpus AbsTRCT \citep{mayer2020transformer} se compone de 500 documentos sobre el estudio de cuatro enfermedades diferentes:
 glaucoma, hipertensi\'on, hepatitis B y diabetes. Cada oraci\'on es una UDA, aunque no todas son consideradas
 argumentativas. Estas se clasifican en \textit{MajorClaim} con 93 (3\%), \textit{Claim} con 993 (30\%) y \textit{Premise} con 2198 (67\%).
 Las relaciones est\'an representadas por tres categor\'ias: \textit{support} con 1763 (85\%), \textit{partial-attack} con 238 (12\%) y
@@ -437,7 +483,7 @@ existentes.
 
 \subsubsection*{Cartas a la Direcci\'on}
 
-La secci\'on ``Cartas a la Direcci\'on'' \cite{gallego2013cartas} es un segmento del peri\'odico \textit{Granma} donde se publican
+La secci\'on ``Cartas a la Direcci\'on'' \citep{gallego2013cartas} es un segmento del peri\'odico \textit{Granma} donde se publican
 cartas enviadas por la poblaci\'on o empresas a dicha entidad. En general, las cartas 
 presentan dudas o problemas de la poblaci\'on con el objetivo de obtener respuestas del organismo
 asociado. 
@@ -527,17 +573,12 @@ esta selecci\'on est\'a conformada por 1702 cartas, lo que representa un 59\% de
 
 % HERE STARTS
 
-Para realizar la selecci\'on del modelo se utiliz\'o el corpus de Ensayos Argumentativos. Con este se ajustaron
-las arquitecturas e hiperpar\'ametros de los modelos propuestos. La mejor combinaci\'on de estos fue utilizada 
-para el entrenamiento de los corpus restantes. Finalmente, los modelos fueron utilizados para anotar los 
-textos de la secci\'on ``Cartas a la Direcci\'on'' de \textit{Granma}. 
-
 \subsubsection*{Segmentador de UDA}
 
 El modelo seleccionado fue usado en el entrenamiento de los dem\'as conjuntos de datos obteniendo los resultados mostrados
 en Tabla \ref{table:test_metrics_segmenter} y Tabla \ref{table:test_bioes_metrics_segmenter}.
 
-Las m\'etricas 50\%F1 y 100\%F1 \cite{persing2016end} est\'an
+Las m\'etricas 50\%F1 y 100\%F1 \citep{persing2016end} est\'an
 basadas en la idea de la m\'etrica F1, pero orientada a secuencias, donde el n\'umero denota el porcentaje de secuencia inferida que debe coincidir con 
 la secuencia anotada para ser considerado una coincidencia.
 
@@ -674,7 +715,7 @@ de cartas, la carta original y la respuesta enviada a esta. Cada una de estas 30
 conjunto de datos y se realiz\'o una evaluaci\'on que consider\'o si la UDA se extrajo y clasific\'o correctamente, 
 as\'i como si la relaci\'on tambi\'en fue extra\'ida y clasificada por el modelo de manera adecuada.
 
-\subsubsection*{An\'alisis del corpus Ensayos Argumentativos}
+\subsubsection*{Resultados del modelo entrenado con Ensayos Argumentativos}
 
 Los ensayos argumentativos presentan una anotaci\'on de UDAs a un nivel de unidades de texto que pueden ser 
 m\'as peque\~nas que oraciones y clasifican estas en las clases \textit{MajorClaim} (MC), \textit{Claim} (C) y \textit{Premise}
@@ -705,7 +746,7 @@ dado que este conjunto de datos posee un gran desbalance en las etiquetas de las
 estas a las de \textit{supports}, el modelo no fue capaz de realizar anotaciones de \textit{attacks}, tanto en 
 el conjunto de pruebas como en las ``Cartas a la Direcci\'on'' del \textit{Granma}.
 
-\subsubsection*{An\'alisis de CDCP}
+\subsubsection*{Resultados del modelo entrenado con CDCP}
 
 El corpus CDCP las UDAs son segmentadas, en la mayor\'ia de los casos, en oraciones 
 (solamente el 1\% de los \textit{tokens} se encuentran fuera de una UDA),
@@ -734,14 +775,14 @@ La cantidad de relaciones anotadas por el modelo entrenado en este corpus
 disminuye en comparaci\'on a las anotadas por el modelo entrenado con el corpus Ensayos
 Argumentativos. Las relaciones \textit{reasons} son las m\'as encontradas. % TODO Poner numeros de esto
 
-\subsubsection*{An\'alisis del corpus AbsTRCT}
+\subsubsection*{Resultados del modelo entrenado con AbsTRCT}
 
 El conjunto de datos presenta un estilo de segmentaci\'on de UDAs en donde se anotan 
 secciones de textos m\'as grandes que en el corpus Ensayos Argumentativos, aunque no necesariamente 
 todas las oraciones o la oraci\'on completa es considerada argumentativa. 
 Estas se clasifican igual que el corpus Ensayos Argumentativos, aunque 
 en este conjunto de datos se presenta un desbalance de etiquetas grande, favoreciendo 
-a las \textit{Premise} y las \textit{Claim}, % TODO Poner porcientos
+a las \textit{Premise} y las \textit{Claim},
 dejando sin representaci\'on casi a \textit{MajorClaim}
 (menor del 1\% de las etiquetas BIOES), lo que trajo como consecuencia que el modelo no fuera 
 capaz de diferenciar este tipo de UDA. Las relaciones se presentaron como \textit{partial-attack},
@@ -844,9 +885,9 @@ se comput\'o en las investigaciones donde se propusieron los modelos.
 			\hline
 			Propuesto    				& 0,56      	 & 0,45         	 & 0,68 			 & 0,37               \\
 			\hline
-			\cite{niculae2017argument}  & $\times$       & 0,73              & 0,27 			 &  $\times$          \\
+			\citep{niculae2017argument}  & $\times$       & 0,73              & 0,27 			 &  $\times$          \\
 			\hline
-			\cite{galassi2021deep} 		& $\times$  	 & 0,79              & 0,30	*   		 &  0,15	*         \\
+			\citep{galassi2021deep} 		& $\times$  	 & 0,79              & 0,30	*   		 &  0,15	*         \\
 			\hline
 		\end{tabular}
 	}
@@ -866,9 +907,9 @@ se comput\'o en las investigaciones donde se propusieron los modelos.
 			\hline
 			Propuesto    				& 0,79      	 & 0,50              & 0,74 			 & 0,39               \\
 			\hline
-			\cite{mayer2020transformer} & $\times$       & 0,88	$\checkmark$ & $\times$  		 & 0,66 *             \\
+			\citep{mayer2020transformer} & $\times$       & 0,88	$\checkmark$ & $\times$  		 & 0,66 *             \\
 			\hline
-			\cite{galassi2021deep} 		& $\times$  	 & 0,91 	         & 0,54 *            & 0,70 *    		  \\
+			\citep{galassi2021deep} 		& $\times$  	 & 0,91 	         & 0,54 *            & 0,70 *    		  \\
 			\hline
 		\end{tabular}
 	}
