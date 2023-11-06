@@ -271,23 +271,23 @@ palabras. El proceso se divide en varias partes:
 \begin{enumerate}
 	\item Traducci\'on autom\'atica de oraciones: proceso de
 	traducir autom\'aticamente texto de un lenguaje fuente a un lenguaje objetivo.
-	\begin{adjustwidth}{25pt}{25pt}
-		Firstly , people normally have lots of things to do . \\
-		En primer lugar , la gente normalmente tiene muchas cosas que hacer .
-	\end{adjustwidth}
+	\begin{itemize}
+		\item Firstly , people normally have lots of things to do . 
+		\item En primer lugar , la gente normalmente tiene muchas cosas que hacer .
+	\end{itemize}
 	\item Alineaci\'on de palabras: consiste en asignar las palabras del lenguaje fuente
 	a sus equivalentes generadas en el lenguaje objetivo. Los \'indices en los \emph{tokens} del lenguaje objetivo representan 
 	los \emph{tokens} asociados del lenguaje fuente, por ejemplo, a \emph{Firstly} se le asocia la frase \emph{En primer lugar}.
-	\begin{adjustwidth}{25pt}{25pt}
-		Firstly$_0$ ,$_1$ people$_2$ normally$_3$ have$_4$ lots$_5$ of$_6$ things$_7$ to$_8$ do$_9$ .$_{10}$ \\
-		En$_0$ primer$_0$ lugar$_0$ ,$_1$ la$_2$ gente$_2$ normalmente$_3$ tiene$_4$ muchas$_5$ cosas$_7$ que$_8$ hacer$_9$ .$_{10}$
-	\end{adjustwidth}
+	\begin{itemize}
+		\item Firstly$_0$ ,$_1$ people$_2$ normally$_3$ have$_4$ lots$_5$ of$_6$ things$_7$ to$_8$ do$_9$ .$_{10}$ \\
+		\item En$_0$ primer$_0$ lugar$_0$ ,$_1$ la$_2$ gente$_2$ normalmente$_3$ tiene$_4$ muchas$_5$ cosas$_7$ que$_8$ hacer$_9$ .$_{10}$
+	\end{itemize}
 	\item Proyecci\'on de etiquetas: consiste en transformar las etiquetas de las palabras en la secuencia origen
 	hacia las palabras de la secuencia destino tomando como datos las alineaciones entre estas.
-	\begin{adjustwidth}{25pt}{25pt}
-		Firstly$_O$ ,$_O$ people$_B$ normally$_I$ have$_I$ lots$_I$ of$_I$ things$_I$ to$_I$ do$_I$ .$_O$ \\
-		En$_O$ primer$_O$ lugar$_O$ ,$_O$ la$_O$ gente$_B$ normalmente$_I$ tiene$_I$ muchas$_I$ cosas$_I$ que$_I$ hacer$_I$ .$_O$
-	\end{adjustwidth}
+	\begin{itemize}
+		\item Firstly$_O$ ,$_O$ people$_B$ normally$_I$ have$_I$ lots$_I$ of$_I$ things$_I$ to$_I$ do$_I$ .$_O$ \\
+		\item En$_O$ primer$_O$ lugar$_O$ ,$_O$ la$_O$ gente$_B$ normalmente$_I$ tiene$_I$ muchas$_I$ cosas$_I$ que$_I$ hacer$_I$ .$_O$
+	\end{itemize}
 \end{enumerate}
 
 
